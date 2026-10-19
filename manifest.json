@@ -1,6 +1,6 @@
 {
-  "name": "HYROX 40 — Train with purpose",
-  "short_name": "HYROX 40",
+  "name": "HYROX — Train with purpose",
+  "short_name": "HYROX",
   "description": "A focused five-day, 40-minute HYROX training companion. Sports Watch design with real-time target tracking.",
   "start_url": "./",
   "display": "standalone",
