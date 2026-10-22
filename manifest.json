@@ -1,72 +1,33 @@
 {
-  "name": "HYROX — Train with purpose",
-  "short_name": "HYROX",
-  "description": "A focused five-day, 40-minute HYROX training companion. Sports Watch design with real-time target tracking.",
+  "name": "Hyrox",
+  "short_name": "Hyrox",
+  "description": "Personal Hyrox race preparation — station tracking, race-anchored periodisation and a projected finish time built from your own splits.",
   "start_url": "./",
   "display": "standalone",
   "scope": "./",
   "orientation": "portrait-primary",
-  "background_color": "#0d0d0d",
-  "theme_color": "#00ff00",
+  "background_color": "#0f1419",
+  "theme_color": "#0f1419",
   "prefer_related_applications": false,
-  "screenshots": [
-    {
-      "src": "icon-apple.svg",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "form_factor": "narrow",
-      "purpose": "maskable any"
-    }
-  ],
+  "categories": ["fitness", "sports", "health"],
   "icons": [
     {
-      "src": "icon-apple.svg",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "maskable",
-      "platform": "ios"
-    },
-    {
-      "src": "icon-apple.svg",
+      "src": "icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
-    }
-  ],
-  "categories": ["fitness", "sports"],
-  "shortcuts": [
+    },
     {
-      "name": "Start Workout",
-      "short_name": "Start",
-      "description": "Begin today's HYROX workout",
-      "url": "./?action=start",
-      "icons": [
-        {
-          "src": "icon-apple.svg",
-          "sizes": "192x192",
-          "type": "image/svg+xml",
-          "purpose": "maskable"
-        }
-      ]
-    }
-  ],
-  "protocol_handlers": [
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
     {
-      "protocol": "web+hyrox",
-      "url": "./?protocol=%s"
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
-  ],
-  "share_target": {
-    "action": "/?action=import",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "files": [
-        {
-          "name": "workout_data",
-          "accept": ["application/json"]
-        }
-      ]
-    }
-  }
+  ]
 }
