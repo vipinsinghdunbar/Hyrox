@@ -29,7 +29,7 @@ background:var(--navy);color:var(--white);
 overscroll-behavior-y:none;
 -webkit-font-smoothing:antialiased;
 }
-body::before{content:"";position:fixed;inset:0 0 auto;height:var(--sat);background:var(--navy);z-index:40}
+body::before{content:"";position:fixed;inset:0 0 auto;height:min(var(--sat),60px);background:var(--navy);z-index:40}
 /* ====== APPLE-STYLE SCROLLING ====== */
 .scroll{
 flex:1;
@@ -44,11 +44,20 @@ scrollbar-width:none;
 .snap::-webkit-scrollbar{display:none}
 .snap>*{scroll-snap-align:start}
 
-#app{display:flex;flex-direction:column;height:100vh;height:100dvh;position:fixed;inset:0}
+#app{
+/* Pin to the viewport with inset:0 and let the fixed position define the box.
+   height:100dvh is NOT used: in iOS standalone mode dvh can under-report by the
+   bottom safe-area inset, which leaves dead space below the tab bar. */
+display:flex;flex-direction:column;
+position:fixed;top:0;left:0;right:0;bottom:0;
+height:auto;
+}
 
 /* ====== LARGE TITLE HEADER (iOS style) ====== */
 .hdr{
-padding:calc(var(--sat) + 10px) max(18px,var(--sal)) 10px max(18px,var(--sar));
+/* Clamp the top inset the same way: a large reported value should not push
+   the title halfway down the screen. */
+padding:calc(min(var(--sat),60px) + 10px) max(18px,var(--sal)) 10px max(18px,var(--sar));
 background:rgba(15,20,25,.86);
 backdrop-filter:saturate(180%) blur(20px);
 -webkit-backdrop-filter:saturate(180%) blur(20px);
@@ -71,7 +80,9 @@ background:rgba(15,20,25,.92);
 backdrop-filter:saturate(180%) blur(20px);
 -webkit-backdrop-filter:saturate(180%) blur(20px);
 border-top:.5px solid var(--border);
-padding:8px max(6px,var(--sal)) calc(var(--sab) + 6px) max(6px,var(--sar));
+/* The bottom inset is the home-indicator strip. Clamp it so a large reported
+   inset cannot inflate the bar; 6px floor keeps it comfortable with no inset. */
+padding:7px max(6px,var(--sal)) max(6px,min(var(--sab),20px)) max(6px,var(--sar));
 position:relative;z-index:30;
 }
 .tab{
@@ -166,6 +177,43 @@ margin:22px 0 10px;padding:0 2px;
 }
 .gtitle i{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .gtitle b{margin-left:auto;font-weight:600;font-size:10px;line-height:1;color:var(--muted);letter-spacing:.4px;text-transform:none}
+
+/* ===== progress summary rows ===== */
+.prow{display:flex;align-items:center;gap:10px;
+background:var(--card);border:.5px solid var(--border);border-radius:14px;
+padding:12px 13px;margin-bottom:7px;cursor:pointer;transition:background .15s,border-radius .15s}
+.prow:active{background:var(--card2)}
+.prow.open{border-bottom-left-radius:0;border-bottom-right-radius:0;margin-bottom:0;border-bottom-color:transparent}
+.prow-n{flex:1;min-width:0}
+.prow-v{text-align:right;flex-shrink:0;min-width:52px}
+.prow-t{flex-shrink:0;min-width:58px;text-align:right}
+.pexp{border-top-left-radius:0;border-top-right-radius:0;margin-top:0;border-top:none}
+
+/* ===== week strip ===== */
+.wnav{display:flex;align-items:center;justify-content:space-between;
+padding:0 14px 10px;gap:10px}
+.wnav span{font-weight:800;font-size:11px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted)}
+.wnav button{background:var(--card2);border:.5px solid var(--border);color:var(--muted2);
+width:28px;height:28px;border-radius:50%;font-size:16px;line-height:1;cursor:pointer;flex-shrink:0}
+.wnav button:active{opacity:.6}
+.wrow{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+scroll-snap-type:x proximity;scrollbar-width:none;padding:0 12px}
+.wrow::-webkit-scrollbar{display:none}
+.wcell{flex:0 0 46px;scroll-snap-align:center;text-align:center;
+padding:9px 3px 8px;border-radius:12px;border:1px solid transparent;min-width:0}
+.wcell.now{border-color:var(--gold);background:rgba(255,215,0,.07)}
+.wdow{font-weight:800;font-size:10px;letter-spacing:.4px;color:var(--muted2);text-transform:uppercase}
+.wcell.now .wdow{color:var(--gold)}
+.wdate{font-weight:700;font-size:13px;margin-top:2px;color:var(--white)}
+.wdot{width:19px;height:19px;border-radius:50%;margin:7px auto 0;
+display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;line-height:1}
+.wdot.g{background:rgba(32,166,118,.2);color:var(--green)}
+.wdot.a{background:rgba(255,215,0,.2);color:var(--gold)}
+.wdot.r{background:rgba(239,68,68,.16);color:var(--red)}
+.wdot.m{background:rgba(255,255,255,.06);color:var(--muted)}
+.wname{font-size:8.5px;line-height:1.25;color:var(--muted);margin-top:6px;
+overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.wcell.now .wname{color:var(--muted2)}
 
 .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .dot.g{background:var(--green)}.dot.r{background:var(--red)}
@@ -293,7 +341,7 @@ const PLAN_START = new Date('2026-10-21T00:00:00');   // Week 1 Mon 21 Oct 2026
 /* kind: 'time' (mm:ss) | 'reps' | 'kg' | 'dist' */
 
 const EX = {
-  /* ============ THE 8 HYROX RACE STATIONS + RUN ============ */
+  /* ============ THE 8 HYROX RACE STATIONS + RUN + TRANSITIONS ============ */
   run1k:      {n:'1 km Run',            grp:'hyrox', kind:'time', dir:'lower', base:401, unit:'mm:ss', note:'Race pace anchor'},
   ski:        {n:'SkiErg 1000 m',       grp:'hyrox', kind:'time', dir:'lower', base:284, unit:'mm:ss', note:'500 m logged 2:22 → 1000 m est.'},
   sledPush:   {n:'Sled Push 50 m',      grp:'hyrox', kind:'time', dir:'lower', base:78,  unit:'mm:ss', load:152, loadUnit:'kg'},
@@ -305,57 +353,66 @@ const EX = {
   wallball:   {n:'Wall Balls 100 reps', grp:'hyrox', kind:'time', dir:'lower', base:420, unit:'mm:ss', load:6, loadUnit:'kg', note:'50 reps logged @ 3:30'},
   roxzone:    {n:'Roxzone (transitions)',grp:'hyrox',kind:'time', dir:'lower', base:394, unit:'mm:ss', note:'Total transition time. Field average 6:34 — more than most single stations.', est:true},
 
-  /* ============ POSTERIOR CHAIN + PULL (drives sled pull, row, ski) ============ */
-  deadlift:   {n:'Deadlift 5RM',        grp:'pull',  kind:'kg',   dir:'higher', base:100, unit:'kg'},
-  rdl:        {n:'Romanian Deadlift 8RM',grp:'pull', kind:'kg',   dir:'higher', base:70,  unit:'kg'},
-  row_bb:     {n:'Bent-Over Row 8RM',   grp:'pull',  kind:'kg',   dir:'higher', base:60,  unit:'kg'},
-  pullup:     {n:'Pull-ups (max set)',  grp:'pull',  kind:'reps', dir:'higher', base:8,   unit:'reps'},
-  kbswing:    {n:'KB Swing 20 reps',    grp:'pull',  kind:'kg',   dir:'higher', base:24,  unit:'kg'},
+  /* ============ STRENGTH THAT FEEDS THE STATIONS ============
+     Four lifts, each earning its place:
+     - Romanian deadlift: hip hinge and posterior chain, the engine behind
+       sled pull and rowing. Replaces the conventional deadlift (dropped).
+     - Back squat: legs under fatigue — wall balls, lunges, burpee jumps.
+     - Bent-over row: horizontal pull, the other half of sled pull.
+     - Overhead press: shoulders for wall balls and SkiErg. */
+  rdl:        {n:'Romanian Deadlift 8RM',grp:'str', kind:'kg',   dir:'higher', base:70,  unit:'kg', note:'Hip hinge — drives sled pull and row'},
+  squat:      {n:'Back Squat 5RM',      grp:'str',  kind:'kg',   dir:'higher', base:90,  unit:'kg', note:'Legs under fatigue — wall balls and lunges'},
+  row_bb:     {n:'Bent-Over Row 8RM',   grp:'str',  kind:'kg',   dir:'higher', base:60,  unit:'kg', note:'Horizontal pull — sled pull'},
+  ohp:        {n:'Overhead Press 5RM',  grp:'str',  kind:'kg',   dir:'higher', base:45,  unit:'kg', note:'Shoulders — wall balls and SkiErg'},
 
-  /* ============ LEGS + CORE (drives wall ball, lunges, burpee jump) ============ */
-  squat:      {n:'Back Squat 5RM',      grp:'legs',  kind:'kg',   dir:'higher', base:90,  unit:'kg'},
-  frontsq:    {n:'Front Squat 5RM',     grp:'legs',  kind:'kg',   dir:'higher', base:65,  unit:'kg'},
-  splitsq:    {n:'Split Squat 8/leg',   grp:'legs',  kind:'kg',   dir:'higher', base:20,  unit:'kg ea'},
-  stepup:     {n:'Weighted Step-up 10/leg',grp:'legs',kind:'kg',  dir:'higher', base:16,  unit:'kg ea'},
-  thruster:   {n:'Thruster 10 reps',    grp:'legs',  kind:'kg',   dir:'higher', base:40,  unit:'kg'},
-  legraise:   {n:'Hanging Leg Raise',   grp:'legs',  kind:'reps', dir:'higher', base:12,  unit:'reps'},
-  plank:      {n:'Plank Hold',          grp:'legs',  kind:'time', dir:'higher', base:90,  unit:'mm:ss'},
-
-  /* ============ GRIP + SHOULDERS (protects farmers, ski, wall ball) ============ */
-  farmhold:   {n:'Farmers Hold',        grp:'grip',  kind:'time', dir:'higher', base:60, unit:'mm:ss', load:24, loadUnit:'kg ea'},
-  ohp:        {n:'Overhead Press 5RM',  grp:'grip',  kind:'kg',   dir:'higher', base:45, unit:'kg'},
-  deadhang:   {n:'Dead Hang',           grp:'grip',  kind:'time', dir:'higher', base:50, unit:'mm:ss'},
-  pushup:     {n:'Push-ups (max set)',  grp:'grip',  kind:'reps', dir:'higher', base:25, unit:'reps'},
+  /* ============ CORE + GRIP ============ */
+  farmhold:   {n:'Farmers Hold',        grp:'core', kind:'time', dir:'higher', base:60, unit:'mm:ss', load:24, loadUnit:'kg ea', note:'Grip — farmers carry and sled pull'},
+  plank:      {n:'Plank Hold',          grp:'core', kind:'time', dir:'higher', base:90, unit:'mm:ss', note:'Trunk under load'},
 
   /* ============ CONDITIONING ============ */
-  easyrun:    {n:'Easy Run',            grp:'cond',  kind:'dist', dir:'higher', base:6,  unit:'km'},
-  run5k:      {n:'5 km Run',            grp:'cond',  kind:'time', dir:'lower',  base:1380,unit:'mm:ss'},
-  bike:       {n:'Bike Erg 2000 m',     grp:'cond',  kind:'time', dir:'lower',  base:230, unit:'mm:ss'},
+  easyrun:    {n:'Easy Run',            grp:'cond', kind:'dist', dir:'higher', base:6,  unit:'km', note:'Aerobic base'},
 };
 
 const GRP = {
   hyrox:{n:'Hyrox Race Stations', c:'var(--gold)'},
-  pull: {n:'Posterior Chain & Pull', c:'var(--blue)'},
-  legs: {n:'Legs & Core', c:'var(--green)'},
-  grip: {n:'Grip & Shoulders', c:'var(--amber)'},
+  str:  {n:'Strength', c:'var(--blue)'},
+  core: {n:'Core & Grip', c:'var(--green)'},
   cond: {n:'Conditioning', c:'var(--muted2)'},
 };
 
 /* ---------------- WEEKLY TEMPLATE (Mon/Wed/Fri full, Tue/Thu run) ---------------- */
 const WK = {
-  1:{n:'Strength Anchor', tag:'Heavy · 40 min', ex:['sledPush','sledPull','deadlift','wallball','legraise'],
-     brief:'Sleds heavy and clean. Deadlift builds the engine that pulls the sled. Finish with core.'},
+  /* ===================================================================
+     WEEKLY STRUCTURE — two hard days, not three.
+
+     Why: running is ~58% of his race time, stations ~35%. A 2025 study
+     of recreational Hyrox athletes found finish time correlated with
+     VO2max (rho -0.71) and endurance volume (rho -0.68); grip strength
+     (0.09) and resistance volume (0.34) were NOT significant. Station
+     time correlated with nothing. Coaching sources converge on 2 hard
+     sessions a week with >=48h between, and 70-80% of work easy.
+
+     Mon = strength + short circuit (hard)
+     Tue = easy run (genuinely easy)
+     Wed = threshold running, the single highest-value session
+     Thu = easy run
+     Fri = race simulation (hard)
+     Sat = optional accessory, Sun = rest
+     =================================================================== */
+  1:{n:'Strength + Circuit', tag:'Heavy then hard · 40 min', ex:['rdl','squat','sledPush','sledPull','wallball'],
+     circuitFrom:2,
+     brief:'Lift heavy first: RDL and squat, full rest between sets — this protects your running mechanics late in the race, which is what strength actually buys you. Then the last three back to back, no rest.'},
   2:{n:'Easy Run',        tag:'Aerobic · 30–45 min', ex:['easyrun'],
-     brief:'Outside, conversational pace. This is recovery that still builds the aerobic floor.'},
-  3:{n:'Aerobic Anchor',  tag:'Intervals · 40 min', ex:['run1k','ski','row','plank'],
-     brief:'4 × 1 km at goal pace. Pacing consistency matters more than any single rep.'},
+     brief:'Conversational pace — you should be able to speak in full sentences. This is not a soft option: easy aerobic volume is the strongest predictor of a fast Hyrox.'},
+  3:{n:'Threshold Run',   tag:'Quality · 40 min', ex:['run1k','ski','plank'],
+     brief:'3 × 6 min at threshold (comfortably hard, not racing), 75 s jog between. Then SkiErg. One second per km off your run pace is eight seconds off race day — nothing else in training pays back that fast.'},
   4:{n:'Easy Run',        tag:'Aerobic · 30–45 min', ex:['easyrun'],
-     brief:'Second aerobic day. Keep it genuinely easy — Friday is the hard one.'},
+     brief:'Second easy day. Keep it genuinely easy — Friday is the hard one and you cannot fake recovery.'},
   5:{n:'Race Simulation', tag:'Full effort · 40 min', ex:['run1k','ski','run1k','sledPush','run1k','sledPull','run1k','burpee'],
-     brief:'Official race order, compromised running. Every station follows a 1 km run — that is the whole point.',
-     half:true},
-  6:{n:'Optional Strength',tag:'Accessory · 30 min', ex:['squat','ohp','pullup','pushup','farmhold'],
-     brief:'Only if you feel fresh. Pure strength accessory — no conditioning.'},
+     brief:'Official race order, compromised running. Run at your 1 km best + 10–15 s/km, not flat out. Practise transitions: no standing still, know your grip before you arrive.',
+     half:true, roxDrill:true},
+  6:{n:'Optional Accessory',tag:'Top-up · 30 min', ex:['row_bb','ohp','farmhold','plank'],
+     brief:'Only if Friday felt easy. Pull, press, grip, trunk. If you are tired, skip it — the week already has two hard days and that is the ceiling.'},
   0:{n:'Rest',            tag:'Recovery', ex:[], brief:'Full rest. Adaptation happens now, not in the gym.'},
 };
 
@@ -365,10 +422,10 @@ const WK = {
 function blockOf(){
   const out=weeksOut();
   if(out<=1)  return {n:'Race Week',          f:'Nothing you do now adds fitness. Move, sleep, eat, rehearse transitions.', i:5, out};
-  if(out<=4)  return {n:'Block 4 · Peak',     f:'Taper. Race intensity, half the volume. Sharpen, do not dig.',             i:4, out};
-  if(out<=8)  return {n:'Block 3 · Simulation',f:'Game speed. Race-order simulations weekly, compromised running every one.',i:3, out};
-  if(out<=14) return {n:'Block 2 · Build',    f:'Volume and intensity climb. Tighten pace, hold the heavy loads.',          i:2, out};
-  return        {n:'Block 1 · Base',          f:'Aerobic base + strength foundation. Establish real baselines on every station.', i:1, out};
+  if(out<=3)  return {n:'Block 4 · Taper',    f:'10–14 days at about half the volume, intensity held. Sharpen, do not dig.', i:4, out};
+  if(out<=9)  return {n:'Block 3 · Simulation',f:'Race-order work weekly at goal pace. Pacing and transitions are the focus now.',i:3, out};
+  if(out<=15) return {n:'Block 2 · Build',    f:'Strength endurance. Volume and intensity climb together; hold the heavy loads.',i:2, out};
+  return        {n:'Block 1 · Base',          f:'Aerobic base and strength foundation. Get a real number on every station.', i:1, out};
 }
 
 /* ---------------- STATE ---------------- */
@@ -410,16 +467,19 @@ function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+pad(d.getMon
    costly session. Base = short sim. Build = half sim. Simulation block =
    full race order. Peak = sharpening only. */
 const FRIDAY_BY_BLOCK={
-  1:{n:'Mini Simulation',  tag:'Moderate · 40 min', ex:['run1k','ski','run1k','sledPush'], half:true,
-     brief:'Short race-order block. The point is learning to run on tired legs, not a maximal effort.'},
-  2:{n:'Half Simulation',  tag:'Hard · 40 min', ex:['run1k','ski','run1k','sledPush','run1k','sledPull','run1k','burpee'], half:true,
-     brief:'Official race order, compromised running. Every station follows a 1 km run — that is the whole point.'},
-  3:{n:'Race Simulation',  tag:'Full effort · 40 min', ex:['run1k','ski','run1k','sledPush','run1k','sledPull','run1k','burpee','run1k','row'], half:true,
-     brief:'Game speed. Hold pace across stations — consistency predicts race day better than any single split.'},
-  4:{n:'Race Sharpener',   tag:'Short · 25 min', ex:['run1k','sledPush','run1k','wallball'], half:true,
-     brief:'Race pace, low volume. You are rehearsing, not building. Stop while it still feels easy.'},
-  5:{n:'Race Rehearsal',   tag:'Easy · 20 min', ex:['run1k','ski'], half:true,
-     brief:'Movement only. Rehearse transitions and grip changes. Nothing hard.'},
+  /* Phase structure follows the standard block model: strength emphasis
+     first, then strength-endurance, then simulation, then taper.
+     Taper is 10-14 days at ~50% volume with intensity held. */
+  1:{n:'Mini Simulation',  tag:'Moderate · 40 min', ex:['run1k','ski','run1k','sledPush'], half:true, roxDrill:true,
+     brief:'Short race-order block. The point is learning to run on tired legs and rehearsing transitions — not a maximal effort.'},
+  2:{n:'Half Simulation',  tag:'Hard · 40 min', ex:['run1k','ski','run1k','sledPush','run1k','sledPull','run1k','burpee'], half:true, roxDrill:true,
+     brief:'Official race order. Hold run pace at 1 km best + 10–15 s/km. Every station follows a run — that is the whole point.'},
+  3:{n:'Race Simulation',  tag:'Full effort · 40 min', ex:['run1k','ski','run1k','sledPush','run1k','sledPull','run1k','burpee','run1k','row'], half:true, roxDrill:true,
+     brief:'Game speed. All runs within 10% of each other — consistency predicts race day better than any single split.'},
+  4:{n:'Race Sharpener',   tag:'Short · 25 min', ex:['run1k','sledPush','run1k','wallball'], half:true, roxDrill:true,
+     brief:'Race pace, half the volume. Intensity stays, volume drops. You are rehearsing now, not building. Stop while it still feels easy.'},
+  5:{n:'Race Rehearsal',   tag:'Easy · 20 min', ex:['run1k','ski'], half:true, roxDrill:true,
+     brief:'Movement and transitions only. Nothing you do this week adds fitness; you can only subtract it.'},
 };
 function dayPlan(d){
   const g=(d||new Date()).getDay();
@@ -705,13 +765,13 @@ function coachFix(k){
     run1k:'Add one extra 1 km rep on Wednesday before you touch the pace target.',
     ski:'Shorten the stroke and raise the rate — most lost time on SkiErg is a slow catch, not weak legs.',
     sledPush:'Lower your hips and take shorter, faster steps. Drop the load 10 kg and chase speed for two weeks.',
-    sledPull:'This is grip and lats. Your deadlift and bent-over row feed it directly — push those.',
+    sledPull:'This is grip and lats. Romanian deadlift and bent-over row feed it directly — push those.',
     burpee:'Jump less far, cycle faster. Broad jump distance is where people blow their heart rate.',
     row:'Hold the stroke rate down and drive with legs. Rate 24–26, not 30.',
     farmers:'Pure grip. Add farmers holds to the end of every strength session.',
     lunges:'Lunges fail from quads, not lungs. Split squats and step-ups are the fix.',
     wallball:'Breathe at the top, not the bottom. Thrusters build the engine for this.',
-    deadlift:'Hold the load and add reps before you add weight.',
+    rdl:'Hinge, do not squat it. Add reps before you add weight.',
     squat:'Depth before load. Film one set from the side.',
     pullup:'Negatives. Three slow five-second lowers at the end of each session.',
   };
@@ -737,6 +797,53 @@ function renderTabs(){
      <span>${t.n}</span></button>`).join('');
 }
 function go(t){ tab=t; document.getElementById('scroll').scrollTop=0; render(); }
+
+/* =====================================================================
+   WEEK STRIP — 7 compact columns, horizontally scrollable, with
+   week-to-week navigation so past and future are both reachable.
+   ===================================================================== */
+let weekOffset = 0;                       // 0 = this week, -1 = last, +1 = next
+function shiftWeek(d){ weekOffset += d; render(); }
+function weekStrip(now){
+  const base = new Date(now.getTime() + weekOffset*7*864e5);
+  const mon  = new Date(base); mon.setDate(base.getDate()-((base.getDay()+6)%7));
+  const sun  = new Date(mon.getTime()+6*864e5);
+  const label = weekOffset===0 ? 'This week'
+              : weekOffset===-1 ? 'Last week'
+              : weekOffset===1 ? 'Next week'
+              : mon.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' – '+
+                sun.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  let cells='';
+  for(let i=0;i<7;i++){
+    const dd=new Date(mon.getTime()+i*864e5);
+    const key=dd.getFullYear()+'-'+pad(dd.getMonth()+1)+'-'+pad(dd.getDate());
+    const pl=dayPlan(dd), lg=S.logs.find(l=>l.date===key);
+    const isToday=key===todayKey();
+    const past = key < todayKey();
+    // status: done (green) | missed (red, a past training day with no log) | today | planned | rest
+    let cls='m', mark='';
+    if(lg){cls='g';mark='✓';}
+    else if(isToday && pl.ex.length){cls='a';mark='•';}
+    else if(past && pl.ex.length){cls='r';mark='—';}
+    else if(pl.ex.length){cls='m';mark='';}
+    const short = pl.ex.length ? pl.n.replace(/ \+ /,'+').split(' ').slice(0,2).join(' ') : 'Rest';
+    cells+=`<div class="wcell${isToday?' now':''}">
+      <div class="wdow">${dowName(dd)}</div>
+      <div class="wdate">${dd.getDate()}</div>
+      <div class="wdot ${cls}">${mark}</div>
+      <div class="wname">${short}</div>
+    </div>`;
+  }
+  return `<div class="card" style="padding:12px 0 10px">
+    <div class="wnav">
+      <button onclick="shiftWeek(-1)" aria-label="Previous week">‹</button>
+      <span>${label}</span>
+      <button onclick="shiftWeek(1)" aria-label="Next week">›</button>
+    </div>
+    <div class="wrow">${cells}</div>
+    ${weekOffset!==0?`<div style="text-align:center;margin-top:10px"><button class="btn gh sm" style="width:auto;padding:7px 14px" onclick="weekOffset=0;render()">Back to this week</button></div>`:''}
+  </div>`;
+}
 
 /* =====================================================================
    HOME — premium overview
@@ -792,32 +899,9 @@ function vHome(){
     <div class="stat"><div class="stat-v sm w">${Object.keys(EX).filter(k=>latestOf(k)!=null).length}<s>/${Object.keys(EX).length}</s></div><div class="stat-l">Tracked</div></div>
   </div>`;
 
-  // week strip
-  o+=`<div class="sec">Your week</div><div class="card" style="padding:14px">`;
-  const mon=new Date(now); mon.setDate(now.getDate()-((now.getDay()+6)%7));
-  for(let i=0;i<7;i++){
-    const dd=new Date(mon.getTime()+i*864e5);
-    const key=dd.getFullYear()+'-'+pad(dd.getMonth()+1)+'-'+pad(dd.getDate());
-    const pl=dayPlan(dd), lg=S.logs.find(l=>l.date===key);
-    const isToday=key===todayKey();
-    o+=`<div style="display:flex;align-items:center;gap:11px;padding:10px 0;${i<6?'border-bottom:.5px solid var(--border)':''}">
-      <div style="width:30px;flex-shrink:0;text-align:center">
-      <div style="font-weight:800;font-size:11.5px;line-height:1;color:${isToday?'var(--gold)':'var(--white)'}">${dowName(dd)}</div>
-      <div style="font-size:9.5px;color:var(--muted);margin-top:4px">${dd.getDate()}</div></div>
-      <div class="dot ${lg?'g':pl.ex.length?(isToday?'a':'m'):'m'}"></div>
-      <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;${pl.ex.length?'':'color:var(--muted)'}">${pl.n}</div></div>
-      ${lg?'<span class="pill g">Done</span>':isToday&&pl.ex.length?'<span class="pill a">Today</span>':''}
-    </div>`;
-  }
-  o+=`</div>`;
-
-  // top coach line
-  const cl=coachLines();
-  if(cl.length){
-    o+=`<div class="sec">From your coach</div>
-    <div class="coach"><div class="coach-t">${cl[0][0]}</div><div class="coach-p">${cl[0][1]}</div>
-    <button class="btn gh sm" style="margin-top:12px" onclick="go('coach')">Full analysis</button></div>`;
-  }
+  // ---- week strip: horizontal, compact, scrolls through past and future ----
+  o+=`<div class="sec">Your week</div>`;
+  o+=weekStrip(now);
 
   if(backupDue()){
     o+=`<div class="card" style="border-color:rgba(245,158,11,.35)">
@@ -839,90 +923,144 @@ function vHome(){
    TRAIN
    ===================================================================== */
 function vTrain(){
-  const now=new Date(), plan=dayPlan(now), w=weekNo(), bl=blockOf(w);
-  let o=`<div class="hero">
-    <div class="hero-k">${longDate(now)} · Week ${w}</div>
+  const now=new Date(), plan=dayPlan(now), w=weekNo(), bl=blockOf();
+  const loggedToday=S.logs.some(l=>l.date===todayKey());
+
+  /* ---- race countdown, moved here from Coach ---- */
+  let o=`<div class="card" style="padding:14px 16px;margin-bottom:12px" onclick="go('coach')">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+      <div><span style="font-weight:800;font-size:19px;letter-spacing:-.5px;color:var(--gold)">${bl.out}</span>
+      <span style="font-weight:700;font-size:12px;color:var(--muted);margin-left:5px">weeks to race</span></div>
+      <span class="pill m">${bl.n}</span>
+    </div>
+    <div class="bar" style="margin-top:10px"><i style="width:${Math.min(100,Math.max(3,(1-bl.out/19)*100))}%"></i></div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-top:9px">${bl.f}</div>
+  </div>`;
+
+  /* ---- today's session ---- */
+  o+=`<div class="hero">
+    <div class="hero-k">${longDate(now)}</div>
     <div class="hero-h">${plan.n}</div>
     <div class="hero-s">${plan.brief}</div>
-    <div class="hero-row pills"><span class="chip g" style="background:rgba(255,215,0,.13);border-color:rgba(255,215,0,.3);color:var(--gold)">${plan.tag}</span><span class="chip">${plan.ex.length} exercise${plan.ex.length===1?'':'s'}</span></div>
-    ${plan.ex.length?`<button class="btn" style="margin-top:16px" onclick="wkStart()">Start workout</button>
+    <div class="hero-row pills"><span class="chip g" style="background:rgba(255,215,0,.13);border-color:rgba(255,215,0,.3);color:var(--gold)">${plan.tag}</span><span class="chip">${plan.ex.length} exercise${plan.ex.length===1?'':'s'}</span>${loggedToday?'<span class="chip" style="background:rgba(32,166,118,.16);border-color:rgba(32,166,118,.35);color:var(--green)">Logged</span>':''}</div>
+    ${plan.ex.length?`<button class="btn" style="margin-top:16px" onclick="wkStart()">${loggedToday?'Train again':'Start workout'}</button>
     <button class="btn gh sm" style="margin-top:9px" onclick="openLog()">Enter times manually</button>`:''}
   </div>`;
 
   if(plan.ex.length){
-    o+=`<div class="sec">Targets today</div>`;
-    plan.ex.forEach(k=>{
-      const e=EX[k], t=targetOf(k), l=latestOf(k), b=bestOf(k);
+    o+=`<div class="sec">Today's targets</div>`;
+    plan.ex.forEach((k,i)=>{
+      const e=EX[k], t=targetOf(k), b=bestOf(k);
       const beat = b!=null && (e.dir==='lower' ? b<=t : b>=t);
+      const inCircuit = plan.circuitFrom!=null && i>=plan.circuitFrom;
       o+=`<div class="row lead" onclick="openEx('${k}')"><div class="row-main">
-      <div class="row-t">${e.n}</div>
+      <div class="row-t">${e.n}${inCircuit?' <span class="pill a" style="margin-left:5px;padding:2px 6px;font-size:9px">CIRCUIT</span>':''}</div>
       <div class="row-s">${e.load?e.load+' '+e.loadUnit+' · ':''}${b==null?(e.est?'Estimate — no data yet':'No data yet'):beat?'Your best — beat it today':'Best '+fmt(b,e.kind)}</div>
       </div><div class="row-r"><div class="row-v mono">${fmt(t,e.kind)}</div><div class="row-vs">TARGET</div></div>
       <svg class="caret" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l6 6-6 6"/></svg></div>`;
     });
   }
 
-  // full library
-  o+=`<div class="sec">All exercises</div>
-  <p style="font-size:12.5px;color:var(--muted);line-height:1.55;margin:-4px 2px 14px">Every exercise you train is tracked, not just the race stations. Tap any one to log it.</p>`;
-  Object.keys(GRP).forEach(g=>{
-    const ks=Object.keys(EX).filter(k=>EX[k].grp===g);
-    const n=ks.filter(k=>latestOf(k)!=null).length;
-    o+=`<div class="gtitle" style="color:${GRP[g].c}"><i style="background:${GRP[g].c}"></i>${GRP[g].n}<b>${n}/${ks.length} logged</b></div>`;
-    ks.forEach(k=>{
-      const e=EX[k], l=latestOf(k), ip=improvePct(k);
-      o+=`<div class="row${g==='hyrox'?' lead':''}" onclick="openEx('${k}')"><div class="row-main">
-      <div class="row-t">${e.n}</div>
-      <div class="row-s">${l!=null?'Last '+fmt(l,e.kind):(e.est?'Estimate — not your data':'Not logged yet')}${e.load?' · '+e.load+' '+e.loadUnit:''}</div>
-      </div>${spark(k)}<div class="row-r">${ip!=null?`<span class="pill ${ip>0.5?'g':ip<-0.5?'r':'m'}">${ip>0?'+':''}${ip.toFixed(1)}%</span>`:`<span class="pill ${e.est?'a':'m'}">${e.est?'Est':'New'}</span>`}</div>
-      <svg class="caret" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l6 6-6 6"/></svg></div>`;
-    });
-  });
+  /* ---- last session and what's next ---- */
+  const prev=S.logs.filter(l=>l.date<todayKey()).sort((a,b)=>a.date<b.date?1:-1)[0];
+  let nd=null;
+  for(let i=1;i<=7;i++){
+    const d=new Date(now.getTime()+i*864e5);
+    if(dayPlan(d).ex.length){ nd={d, plan:dayPlan(d)}; break; }
+  }
+  o+=`<div class="sec">Around today</div><div class="card">`;
+  if(prev){
+    const ks=Object.keys(prev.results||{});
+    const hits=ks.filter(k=>isHitAsOf(k,prev.results[k],prev.date)).length;
+    o+=`<div style="display:flex;align-items:center;gap:11px;padding:4px 0 12px;border-bottom:.5px solid var(--border)">
+      <div class="dot g"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:13.5px">${prev.name}</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:3px">${longDate(new Date(prev.date+'T12:00:00'))} · ${hits}/${ks.length} targets hit</div>
+      </div>
+      <span class="pill ${hits/Math.max(1,ks.length)>=0.7?'g':'r'}">${Math.round(hits/Math.max(1,ks.length)*100)}%</span>
+    </div>`;
+  } else {
+    o+=`<div style="padding:4px 0 12px;border-bottom:.5px solid var(--border);font-size:12.5px;color:var(--muted)">No previous session logged yet.</div>`;
+  }
+  if(nd){
+    o+=`<div style="display:flex;align-items:center;gap:11px;padding:12px 0 4px">
+      <div class="dot m"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:13.5px;color:var(--muted2)">Next: ${nd.plan.n}</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:3px">${longDate(nd.d)} · ${nd.plan.tag}</div>
+      </div>
+    </div>`;
+  }
+  o+=`</div>`;
+
+  o+=`<p style="font-size:12px;color:var(--muted);line-height:1.6;margin:16px 2px 0">
+  Every exercise and its history lives in <b style="color:var(--muted2)">Progress</b>.</p>`;
   return o;
 }
 
 /* =====================================================================
    PROGRESS — graph per exercise
    ===================================================================== */
-let pGrp='hyrox', pRange='all';
-function vProgress(){
-  const tracked=Object.keys(EX).filter(k=>histOf(k).length>0);
-  let o='';
-  if(!tracked.length){
-    return `<div class="empty"><b>No progress data yet</b><p>Log a session and every exercise gets its own progress graph here — latest value, target line, baseline line and the trend between them.</p>
-    <button class="btn" style="margin-top:18px;max-width:220px" onclick="go('train')">Log a session</button></div>`;
-  }
-  o+=`<div class="seg">${Object.keys(GRP).map(g=>{
-    const n=Object.keys(EX).filter(k=>EX[k].grp===g&&histOf(k).length).length;
-    return n?`<button class="${g===pGrp?'on':''}" onclick="pGrp='${g}';render()">${GRP[g].n.split(' ')[0]}</button>`:'';
-  }).join('')}</div>`;
-  o+=`<div class="seg" style="margin-bottom:18px">
-  ${[['30','30d'],['90','90d'],['all','All']].map(r=>`<button class="${pRange===r[0]?'on':''}" onclick="pRange='${r[0]}';render()">${r[1]}</button>`).join('')}</div>`;
+let pGrp='all', pRange='all', pOpen=null;
+function togglePx(k){ pOpen = (pOpen===k?null:k); render(); }
 
-  const ks=Object.keys(EX).filter(k=>EX[k].grp===pGrp&&histOf(k).length);
-  if(!ks.length) o+=`<div class="empty"><p>Nothing logged in this group yet.</p></div>`;
-  ks.forEach(k=>{
-    const e=EX[k], l=latestOf(k), b=bestOf(k), t=targetOf(k), ip=improvePct(k);
-    // judge the latest session against the target it faced that day
-    const lh=histOf(k), lastDate=lh.length?lh[lh.length-1].d:null;
-    const hit = lastDate?isHitAsOf(k,l,lastDate):null;
-    o+=`<div class="card">
-    <div style="font-weight:700;font-size:15px;line-height:1.2;letter-spacing:-.25px;margin-bottom:12px">${e.n}</div>
-    <div class="chart-hd">
-      <div><div class="chart-v mono" style="color:${hit===null?'var(--white)':hit?'var(--green)':'var(--red)'}">${fmt(l,e.kind)}</div>
-      <div class="chart-l">Latest${e.load?' · '+e.load+' '+e.loadUnit:''}</div></div>
-      <div style="text-align:right">${ip!=null?`<span class="pill ${ip>0.5?'g':ip<-0.5?'r':'m'}">${ip>0?'↑ ':ip<0?'↓ ':''}${Math.abs(ip).toFixed(1)}%</span>`:''}
-      <div style="font-size:10.5px;color:var(--muted);margin-top:8px;font-weight:600">Best ${fmt(b,e.kind)} · Base ${fmt(e.base,e.kind)}</div></div>
-    </div>
-    ${lineChart(k,pRange)}
-    <div class="hr"></div>
-    <div class="sgrid c3">
-      <div style="text-align:center"><div style="font-weight:800;font-size:14px;line-height:1;color:var(--gold)" class="mono">${fmt(t,e.kind)}</div><div class="stat-l">Target</div></div>
-      <div style="text-align:center"><div style="font-weight:800;font-size:14px;line-height:1" class="mono">${histOf(k).length}</div><div class="stat-l">Sessions</div></div>
-      <div style="text-align:center"><div style="font-weight:800;font-size:14px;line-height:1;color:${hit===null?'var(--muted)':hit?'var(--green)':'var(--red)'}">${hit===null?'—':hit?'Hit':'Miss'}</div><div class="stat-l">vs target</div></div>
-    </div>
-    <button class="btn gh sm" style="margin-top:13px" onclick="openEx('${k}')">Log ${e.n}</button>
+function vProgress(){
+  const anyData=Object.keys(EX).some(k=>histOf(k).length>0);
+  let o='';
+
+  const groups=[['all','All']].concat(Object.keys(GRP).map(g=>[g,GRP[g].n.split(' ')[0]]));
+  o+=`<div class="seg">${groups.map(([g,n])=>
+    `<button class="${g===pGrp?'on':''}" onclick="pGrp='${g}';pOpen=null;render()">${n}</button>`).join('')}</div>`;
+
+  if(!anyData){
+    o+=`<div class="empty"><b>No data yet</b><p>Log a session and every exercise you train appears here with its history \u2014 latest, best, and the trend against your target.</p>
+    <button class="btn" style="margin-top:18px;max-width:220px" onclick="go('train')">Go to today's session</button></div>`;
+    return o;
+  }
+
+  const keys=Object.keys(EX).filter(k=>pGrp==='all'||EX[k].grp===pGrp);
+  keys.sort((a,b)=>{const ha=histOf(a).length?1:0, hb=histOf(b).length?1:0; return hb-ha;});
+
+  o+=`<div class="sec">Every exercise</div>
+  <p style="font-size:12px;color:var(--muted);line-height:1.55;margin:-4px 2px 12px">Tap any row for its full history.</p>`;
+
+  let lastGrp=null;
+  keys.forEach(k=>{
+    const e=EX[k], h=histOf(k), l=latestOf(k), b=bestOf(k), t=targetOf(k), ip=improvePct(k);
+    if(pGrp==='all' && e.grp!==lastGrp){
+      lastGrp=e.grp;
+      o+=`<div class="gtitle" style="color:${GRP[e.grp].c}"><i style="background:${GRP[e.grp].c}"></i>${GRP[e.grp].n}</div>`;
+    }
+    const open = pOpen===k;
+    const trend = ip==null ? null : (ip>0.5?'g':ip<-0.5?'r':'m');
+    o+=`<div class="prow${open?' open':''}" onclick="togglePx('${k}')">
+      <div class="prow-n">
+        <div class="row-t">${e.n}</div>
+        <div class="row-s">${h.length?h.length+' session'+(h.length>1?'s':'')+' \u00b7 best '+fmt(b,e.kind):(e.est?'Field estimate \u2014 not your data':'Not logged yet')}</div>
+      </div>
+      <div class="prow-v">
+        <div class="row-v mono" style="color:${l==null?'var(--muted)':'var(--white)'}">${l==null?'\u2014':fmt(l,e.kind)}</div>
+        <div class="row-vs">${l==null?'':'LATEST'}</div>
+      </div>
+      <div class="prow-t">${ip!=null?`<span class="pill ${trend}">${ip>0?'\u2191':ip<0?'\u2193':''}${Math.abs(ip).toFixed(1)}%</span>`:`<span class="pill ${e.est?'a':'m'}">${e.est?'Est':'New'}</span>`}</div>
     </div>`;
+    if(open){
+      o+=`<div class="card pexp">
+        ${h.length?`<div class="seg" style="margin-bottom:12px">
+          ${[['30','30d'],['90','90d'],['all','All']].map(r=>`<button class="${pRange===r[0]?'on':''}" onclick="event.stopPropagation();pRange='${r[0]}';render()">${r[1]}</button>`).join('')}
+        </div>${lineChart(k,pRange)}
+        <div class="hr"></div>
+        <div class="sgrid c3">
+          <div style="text-align:center"><div class="mono" style="font-weight:800;font-size:14px;color:var(--gold)">${fmt(t,e.kind)}</div><div class="stat-l">Target</div></div>
+          <div style="text-align:center"><div class="mono" style="font-weight:800;font-size:14px">${fmt(b,e.kind)}</div><div class="stat-l">Best</div></div>
+          <div style="text-align:center"><div class="mono" style="font-weight:800;font-size:14px;color:var(--muted)">${fmt(e.base,e.kind)}</div><div class="stat-l">Baseline</div></div>
+        </div>`:`<p style="font-size:12.5px;color:var(--muted);line-height:1.6;padding:4px 0 10px">
+          ${e.est?`No data from you yet \u2014 the plan is using the Open men's field average of <b style="color:var(--muted2)">${fmt(e.base,e.kind)}</b>. Log it once and this becomes your number.`:`Nothing logged yet. Baseline is <b style="color:var(--muted2)">${fmt(e.base,e.kind)}</b>.`}
+        </p>`}
+        <button class="btn gh sm" style="margin-top:12px" onclick="event.stopPropagation();openEx('${k}')">Log ${e.n}</button>
+      </div>`;
+    }
   });
   return o;
 }
@@ -953,14 +1091,23 @@ function vProfile(){
     <div class="stat"><div class="stat-v sm w">${bmi?bmi.toFixed(1):'—'}</div><div class="stat-l">BMI</div></div>
     </div>`;
 
-    o+=`<div class="card" style="margin-top:12px"><div class="card-t">Weight trend</div>${weightChart()}
+    /* bi-weekly weigh-in cadence */
+    const lastW = S.weights.length?S.weights[S.weights.length-1]:null;
+    const daysSince = lastW ? Math.floor((new Date()-new Date(lastW.d+'T12:00:00'))/864e5) : null;
+    const due = daysSince==null || daysSince>=14;
+    o+=`<div class="card" style="margin-top:12px${due?';border-color:rgba(245,158,11,.35)':''}">
+      <div class="card-t"${due?' style="color:var(--amber)"':''}>Weight trend · every 2 weeks</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;margin:-6px 0 12px">
+      ${lastW?`Last weighed ${daysSince===0?'today':daysSince===1?'yesterday':daysSince+' days ago'}.${due?' Due now — weigh yourself first thing, before eating.':''}`
+            :'No weigh-ins yet. Weigh first thing in the morning, before eating, same day every fortnight.'}</div>
+      ${weightChart()}
     <button class="btn gh sm" style="margin-top:13px" onclick="openWeight()">Log weight</button></div>`;
 
     // relative strength
     if(wt){
       o+=`<div class="sec">Relative strength</div>
       <p style="font-size:12.5px;color:var(--muted);line-height:1.55;margin:-4px 2px 12px">Strength per kilo of body weight — what actually moves a sled.</p>`;
-      [['deadlift',2.0],['squat',1.7],['ohp',0.9],['frontsq',1.3]].forEach(([k,goal])=>{
+      [['squat',1.7],['rdl',1.5],['row_bb',1.0],['ohp',0.9]].forEach(([k,goal])=>{
         const v=latestOf(k)||EX[k].base; const r=v/wt; const pctg=Math.min(100,r/goal*100);
         o+=`<div class="card" style="padding:14px">
         <div style="display:flex;justify-content:space-between;align-items:baseline">
@@ -1010,10 +1157,11 @@ function vCoach(){
   const w=weekNo(), bl=blockOf(w), d=daysTo(RACE);
   const sc=autoScale();
   let o='';
-  o+=`<div class="hero"><div class="hero-k">${bl.out} week${bl.out===1?'':'s'} to race day</div>
-  <div class="hero-h">${bl.n}</div><div class="hero-s">${bl.f}</div>
-  <div class="bar" style="margin-top:14px"><i style="width:${Math.min(100,Math.max(3,(1-bl.out/19)*100))}%"></i></div>
-  <div style="font-size:10.5px;color:var(--muted);margin-top:8px;font-weight:600">${d} days out · training week ${w}</div></div>`;
+  o+=`<div class="hero">
+  <div class="hero-k">Analysis</div>
+  <div class="hero-h">${bl.n}</div>
+  <div class="hero-s">${bl.f}</div>
+  </div>`;
 
   if(sc.msg){
     o+=`<div class="coach" style="border-color:rgba(56,189,248,.3);background:linear-gradient(145deg,rgba(56,189,248,.1),rgba(56,189,248,.02))">
@@ -1076,7 +1224,26 @@ function vCoach(){
   });
   o+=`</div>`;
 
-  o+=`<div class="sec">Scaling rules</div><div class="card">
+  /* ---- why the plan looks like this ---- */
+  const pjx=projectRace();
+  const runShare=Math.round((bestOf('run1k')||EX.run1k.base)*8/pjx.secs*100);
+  const rxNow=bestOf('roxzone');
+  o+=`<div class="sec">Why this plan</div>
+  <div class="card">
+    <div class="coach-p"><b>Running is ${runShare}% of your race.</b> Stations are about a third. A study of recreational
+    Hyrox athletes found finish time tracked VO2max and endurance volume closely, while grip strength and
+    resistance-training volume showed no significant relationship — and station time correlated with nothing at all.
+    One second per kilometre off your run pace is eight seconds off race day. One second off a station is one second.</div>
+    <div class="coach-p"><b>Two hard days, not three.</b> Monday and Friday. Coaching sources converge on two
+    high-intensity sessions a week with at least 48 hours between, and 70–80% of training genuinely easy.
+    Tuesday and Thursday are easy on purpose — that is where the aerobic engine is built.</div>
+    <div class="coach-p"><b>Strength stays, but for a different reason.</b> Heavy lifting is not what makes your sled
+    faster. It preserves leg stiffness and power so your running holds up in the back half, when races are lost.</div>
+    ${rxNow!=null?`<div class="coach-p"><b>Your Roxzone is ${fmt(rxNow,'time')}.</b> Efficient athletes cover 16 transitions
+    in 2–3 minutes. That is the cheapest time on the course — no fitness required, just not standing still.</div>`:''}
+  </div>
+
+  <div class="sec">Scaling rules</div><div class="card">
   <div class="coach-p" style="margin-bottom:11px"><b>90% or more targets hit</b> → targets tighten 3% next week.</div>
   <div class="coach-p" style="margin-bottom:11px"><b>70–90% hit</b> → targets hold. This is the productive zone.</div>
   <div class="coach-p" style="margin-bottom:11px"><b>Under 70% hit</b> → targets ease 3%. Calibration, not failure.</div>
@@ -1433,9 +1600,15 @@ let W=null;          // active workout session
 let wkTick=null;     // interval handle
 let wakeLock=null;
 
-const REST={sledPush:120,sledPull:120,deadlift:150,squat:150,frontsq:150,ohp:120,row_bb:120,
-            rdl:120,thruster:120,pullup:90,kbswing:90,_round:180,_default:90};
-function restFor(k){ return REST[k]!=null?REST[k]:REST._default; }
+const REST={sledPush:120,sledPull:120,squat:150,rdl:150,ohp:120,row_bb:120,
+            farmhold:90,plank:60,_round:180,_default:90};
+/* A session can mark where its circuit starts (plan.circuitFrom, a 0-based
+   index into plan.ex). From that station on, rest is 15 s — just enough to
+   walk to the next station, not enough to recover. That is the point. */
+function restFor(k, idx, plan){
+  if(plan && plan.circuitFrom!=null && idx!=null && idx>=plan.circuitFrom) return 15;
+  return REST[k]!=null?REST[k]:REST._default;
+}
 
 /* build the block list for a plan */
 function buildBlocks(plan){
@@ -1522,7 +1695,7 @@ function wkDone(){
 function wkAfterStation(){
   const b=W.blocks[W.i];
   if(W.i>=W.blocks.length-1){ W.phase='summary'; wkRender(); return; }
-  const dur = restFor(b.k);
+  const dur = restFor(b.k, W.i, W.plan);
   W.phase='rest'; W.restEnd=Date.now()+dur*1000; W.restFrom=Date.now();
   wkRender();
 }
@@ -1619,7 +1792,23 @@ function wkRender(){
     <div class="wk-name" style="font-size:22px">${EX[nb.k].n}</div>
     <div class="wk-sub">Station ${W.i+2} of ${W.blocks.length} · Target ${fmt(targetOf(nb.k),EX[nb.k].kind)}${EX[nb.k].load?' @ '+EX[nb.k].load+' '+EX[nb.k].loadUnit:''}</div>`;
     if(W.plan.half){
-      body.innerHTML+=`<div class="prevsplit" style="margin-top:20px">Roxzone so far: <b>${fmt(W.rox||0,'time')}</b><br><span style="font-size:10.5px">Transitions cost the average athlete 6:34 on race day.</span></div>`;
+      const rx=W.rox||0;
+      // 16 transitions on race day. Project this session's pace across all 16.
+      const perT = W.i>0 ? rx/W.i : 0;
+      const proj = Math.round(perT*16);
+      const tone = proj<=240?'g':proj<=400?'a':'r';
+      body.innerHTML+=`<div class="prevsplit" style="margin-top:18px">
+        Roxzone so far <b>${fmt(rx,'time')}</b>${W.i>0?` · ${Math.round(perT)}s per transition`:''}
+        ${proj?`<br><span class="pill ${tone}" style="margin-top:7px">At this pace: ${fmt(proj,'time')} across 16</span>`:''}
+      </div>`;
+      if(W.plan.roxDrill){
+        body.innerHTML+=`<div class="prevsplit" style="margin-top:10px;text-align:left;border-color:rgba(56,189,248,.3)">
+          <b style="color:var(--blue)">Transition drill</b><br>
+          <span style="font-size:11px;line-height:1.55">Keep moving — do not stand still. Know your grip before you arrive.
+          Walk in, set up, go. Efficient athletes spend 8 s here; most spend 25 s. Across 16 transitions that is a 4–5 minute swing,
+          more than you will gain from months of sled work.</span>
+        </div>`;
+      }
     }
     foot.innerHTML=`<button class="btn" onclick="wkNext()">Skip rest · start now</button>
     <button class="btn gh sm" onclick="W.restEnd+=30000">+30 sec</button>`;
