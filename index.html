@@ -132,7 +132,7 @@ transition:transform .12s,opacity .12s;
 }
 .btn:active{transform:scale(.975);opacity:.88}
 .btn.alt{background:var(--card2);color:var(--white);border:.5px solid var(--border)}
-.btn.sm{padding:11px;font-size:13px;border-radius:11px}
+.btn.sm{padding:13px 11px;min-height:44px;font-size:13px;border-radius:11px}
 .btn.gh{background:transparent;border:1px solid var(--border);color:var(--muted2)}
 
 /* stat grid — 2-up keeps labels on one line */
@@ -178,6 +178,126 @@ margin:22px 0 10px;padding:0 2px;
 .gtitle i{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .gtitle b{margin-left:auto;font-weight:600;font-size:10px;line-height:1;color:var(--muted);letter-spacing:.4px;text-transform:none}
 
+/* ===== session history ===== */
+.histrow{display:flex;align-items:center;gap:11px;
+background:var(--card);border:.5px solid var(--border);border-radius:14px;
+padding:13px 14px;margin-bottom:8px;cursor:pointer}
+.histrow:active{background:var(--card2)}
+.setsline{font-weight:600;font-size:11.5px;line-height:1.6;color:var(--muted2);
+padding:3px 0;font-variant-numeric:tabular-nums}
+.setsline b{color:var(--muted);font-weight:700;margin-right:6px}
+
+/* ===== set dots on the workout screen ===== */
+.setdots{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;
+margin:0 auto 16px;max-width:330px}
+.sdot{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);
+background:var(--card);color:var(--muted);display:flex;align-items:center;justify-content:center;
+font-weight:800;font-size:11px;line-height:1;flex-shrink:0}
+.sdot.on{background:rgba(32,166,118,.2);border-color:var(--green);color:var(--green)}
+.setdots-l{width:100%;text-align:center;font-weight:700;font-size:10.5px;
+letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+/* a finished set keeps its number but reads as done */
+.sdot.done{background:rgba(32,166,118,.14);border-color:rgba(32,166,118,.5);color:var(--green)}
+/* the set you are currently viewing */
+.sdot.cur{border-color:var(--yellow);color:var(--yellow);background:rgba(250,204,21,.12);
+transform:scale(1.14)}
+.sdot{cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
+
+/* ===== set tabs + panel (workout screen) =====
+   A tab bar names the sets; the panel below swipes between them. */
+.settabs{display:flex;gap:4px;width:100%;max-width:330px;margin:0 auto 9px;
+background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:3px}
+.stab{flex:1;border:none;background:transparent;color:var(--muted);
+font-weight:700;font-size:11.5px;letter-spacing:.2px;line-height:1;
+padding:15px 4px;min-height:44px;border-radius:9px;cursor:pointer;white-space:nowrap;
+display:flex;align-items:center;justify-content:center;gap:5px;
+transition:background .18s,color .18s}
+.stab .tk{font-size:9px;line-height:1}
+.stab.done{color:var(--green)}
+.stab.sel{background:var(--card);color:var(--fg);
+box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.stab.sel.done{color:var(--green)}
+.stab.live:not(.sel){color:var(--yellow)}
+
+.setpager{position:relative;width:100%;max-width:330px;margin:0 auto 12px;
+overflow-x:hidden;overflow-y:visible;touch-action:pan-y;
+-webkit-user-select:none;user-select:none}
+.sptrack{display:flex;will-change:transform;
+transition:transform .3s cubic-bezier(.22,.61,.36,1)}
+.sptrack.drag{transition:none}
+.setpage{flex:0 0 100%;box-sizing:border-box;
+border:1px solid var(--border);border-radius:14px;background:var(--card);
+padding:13px 15px;min-height:84px;display:flex;flex-direction:column;
+align-items:center;justify-content:center;gap:4px;
+transition:opacity .22s,border-color .2s,background .2s}
+.setpage.off{opacity:.5}
+.setpage.isnow{border-color:var(--yellow);background:rgba(250,204,21,.06)}
+.setpage.isdone{border-color:rgba(32,166,118,.45)}
+.sp-h{font-weight:800;font-size:10.5px;letter-spacing:.7px;text-transform:uppercase;
+color:var(--muted)}
+.setpage.isnow .sp-h{color:var(--yellow)}
+.setpage.isdone .sp-h{color:var(--green)}
+.sp-big{font-weight:800;font-size:25px;line-height:1.1;font-variant-numeric:tabular-nums}
+.sp-sub{font-weight:600;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.5}
+.sp-w{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:2px}
+.sp-w button{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);
+background:var(--bg2);color:var(--fg);font-weight:800;font-size:19px;line-height:1;cursor:pointer}
+.sp-w input{width:78px;min-height:46px;text-align:center;font-weight:800;font-size:19px;padding:7px 4px;
+border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--fg);
+font-variant-numeric:tabular-nums}
+.sp-w .u{font-weight:700;font-size:12px;color:var(--muted)}
+
+/* ===== form notes: a button until you want them ===== */
+.cuebtn{display:block;margin:0 auto 14px;padding:8px 16px;border-radius:999px;
+border:1px solid var(--border);background:transparent;color:var(--muted);
+font-weight:700;font-size:11px;letter-spacing:.4px;cursor:pointer}
+.cuebtn:active{background:var(--bg2)}
+.cuebox{position:relative;max-width:330px;margin:0 auto 14px;padding:11px 32px 11px 14px;
+background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.22);border-radius:13px;
+font-size:11.5px;line-height:1.55;color:var(--muted2);text-align:left}
+.cuebox b{color:var(--blue)}
+.cueclose{position:absolute;top:0;right:0;width:44px;height:44px;border:none;
+background:transparent;color:var(--muted);font-size:17px;line-height:1;cursor:pointer;
+display:flex;align-items:flex-start;justify-content:flex-end;padding:6px 8px 0 0}
+
+/* ===== per-set logging ===== */
+.sets{display:flex;flex-direction:column;gap:7px}
+.setrow{display:flex;align-items:center;gap:9px}
+.settick{flex:0 0 36px;height:44px;border-radius:11px;border:1px solid var(--border);
+background:var(--navy);color:var(--muted);font-weight:800;font-size:13px;cursor:pointer;
+transition:all .15s;line-height:1}
+.settick.on{background:rgba(32,166,118,.18);border-color:var(--green);color:var(--green)}
+.settick:active{transform:scale(.94)}
+.setrow input{flex:1;min-width:0}
+.setunit{flex:0 0 44px;text-align:center;font-weight:700;font-size:11px;color:var(--muted)}
+.setsdone{font-weight:700;font-size:11.5px;color:var(--muted);text-align:center;
+padding-top:4px;letter-spacing:.2px}
+.setsdone.done{color:var(--green)}
+
+/* ===== machine settings ===== */
+.machbox{background:var(--navy);border:1px solid var(--border);border-radius:12px;
+margin-bottom:10px;overflow:hidden}
+.machhead{display:flex;align-items:center;justify-content:space-between;gap:10px;
+padding:11px 13px;cursor:pointer}
+.machhead>span:first-child{font-weight:700;font-size:12.5px;color:var(--muted2)}
+.machsum{font-weight:700;font-size:11.5px;color:var(--blue);text-align:right;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60%}
+.machfields{padding:2px 13px 13px;border-top:.5px solid var(--border)}
+.machrow{display:flex;align-items:center;gap:10px;margin-top:10px}
+.machrow label{flex:1;min-width:0;font-weight:600;font-size:12px;color:var(--muted2);line-height:1.3}
+.machrow label em{display:block;font-style:normal;font-size:10px;color:var(--muted);margin-top:2px}
+.machrow input{flex:0 0 88px;text-align:center;padding:10px}
+.machnote{font-size:10.5px;line-height:1.5;color:var(--muted);margin-top:11px}
+
+/* ===== prescription (sets x reps) ===== */
+.rxline{font-weight:700;font-size:11.5px;line-height:1.35;color:var(--gold);margin-top:4px;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rxbox{background:rgba(255,215,0,.09);border:1px solid rgba(255,215,0,.26);border-radius:11px;
+padding:9px 12px;margin-bottom:9px;font-weight:700;font-size:12.5px;line-height:1.4;color:var(--gold)}
+.rxbig{max-width:330px;margin:0 auto 14px;background:rgba(255,215,0,.1);
+border:1px solid rgba(255,215,0,.28);border-radius:13px;padding:11px 15px;
+font-weight:800;font-size:14px;line-height:1.4;color:var(--gold);text-align:center}
+
 /* ===== progress summary rows ===== */
 .prow{display:flex;align-items:center;gap:10px;
 background:var(--card);border:.5px solid var(--border);border-radius:14px;
@@ -210,6 +330,7 @@ display:flex;align-items:center;justify-content:center;font-size:10px;font-weigh
 .wdot.g{background:rgba(32,166,118,.2);color:var(--green)}
 .wdot.a{background:rgba(255,215,0,.2);color:var(--gold)}
 .wdot.r{background:rgba(239,68,68,.16);color:var(--red)}
+.wdot.b{background:rgba(56,189,248,.18);color:var(--blue)}
 .wdot.m{background:rgba(255,255,255,.06);color:var(--muted)}
 .wname{font-size:8.5px;line-height:1.25;color:var(--muted);margin-top:6px;
 overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
@@ -286,7 +407,9 @@ transform:translateY(101%);transition:transform .36s cubic-bezier(.32,.72,0,1);
 .sheet-hd{display:flex;align-items:flex-start;gap:12px;padding:6px max(18px,var(--sal)) 14px max(18px,var(--sar));border-bottom:.5px solid var(--border)}
 .sheet-hd h3{font-size:19px;font-weight:800;letter-spacing:-.4px;flex:1}
 .sheet-hd p{font-size:11.5px;color:var(--muted);margin-top:3px}
-.x{background:var(--card2);border:none;color:var(--white);width:31px;height:31px;border-radius:50%;font-size:17px;cursor:pointer;flex-shrink:0;line-height:1}
+.x{background:var(--card2);border:none;color:var(--white);width:31px;height:31px;border-radius:50%;font-size:17px;cursor:pointer;flex-shrink:0;line-height:1;position:relative}
+/* the circle stays small; the tappable area is 44px */
+.x::after{content:'';position:absolute;top:50%;left:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
 .sheet-bd{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px max(18px,var(--sal)) 0 max(18px,var(--sar))}
 .sheet-ft{padding:12px max(18px,var(--sal)) calc(var(--sab) + 12px) max(18px,var(--sar));border-top:.5px solid var(--border);background:var(--navy)}
 
@@ -341,78 +464,117 @@ const PLAN_START = new Date('2026-10-21T00:00:00');   // Week 1 Mon 21 Oct 2026
 /* kind: 'time' (mm:ss) | 'reps' | 'kg' | 'dist' */
 
 const EX = {
-  /* ============ THE 8 HYROX RACE STATIONS + RUN + TRANSITIONS ============ */
-  run1k:      {n:'1 km Run',            grp:'hyrox', kind:'time', dir:'lower', base:401, unit:'mm:ss', note:'Race pace anchor'},
-  ski:        {n:'SkiErg 1000 m',       grp:'hyrox', kind:'time', dir:'lower', base:284, unit:'mm:ss', note:'500 m logged 2:22 → 1000 m est.'},
-  sledPush:   {n:'Sled Push 50 m',      grp:'hyrox', kind:'time', dir:'lower', base:78,  unit:'mm:ss', load:152, loadUnit:'kg'},
-  sledPull:   {n:'Sled Pull 50 m',      grp:'hyrox', kind:'time', dir:'lower', base:84,  unit:'mm:ss', load:103, loadUnit:'kg'},
-  burpee:     {n:'Burpee Broad Jump 80 m',grp:'hyrox',kind:'time',dir:'lower', base:297, unit:'mm:ss', note:'Open men field average 4:57', est:true},
-  row:        {n:'Row 1000 m',          grp:'hyrox', kind:'time', dir:'lower', base:291, unit:'mm:ss', note:'Open men field average 4:51', est:true},
-  farmers:    {n:'Farmers Carry 200 m', grp:'hyrox', kind:'time', dir:'lower', base:169, unit:'mm:ss', load:24, loadUnit:'kg ea', note:'Open men field average 2:49', est:true},
-  lunges:     {n:'Sandbag Lunges 100 m',grp:'hyrox', kind:'time', dir:'lower', base:335, unit:'mm:ss', load:20, loadUnit:'kg', note:'Open men field average 5:35', est:true},
-  wallball:   {n:'Wall Balls 100 reps', grp:'hyrox', kind:'time', dir:'lower', base:420, unit:'mm:ss', load:6, loadUnit:'kg', note:'50 reps logged @ 3:30'},
+  /* ============ THE 8 HYROX RACE STATIONS + RUN + TRANSITIONS ============
+     `rx` is the training prescription by block: [block1, block2, block3, block4+].
+     It is what you actually DO in a session; `base`/target is the time or load
+     you are chasing on one scored effort. */
+  run1k:      {n:'1 km Run',            grp:'hyrox', kind:'time', dir:'lower', base:401, unit:'mm:ss', note:'Race pace anchor',
+               rx:['3 × 6 min at threshold, 75 s jog','4 × 1 km at goal pace, 2 min','4 × 1 km at goal pace, 90 s','3 × 1 km at race pace, 2 min']},
+  ski:        {n:'SkiErg 1000 m',       grp:'hyrox', kind:'time', dir:'lower', base:284, unit:'mm:ss', note:'500 m logged 2:22 → 1000 m est.',
+               rx:['3 × 500 m, 90 s rest','4 × 500 m, 75 s rest','2 × 1000 m at race pace, 3 min','1 × 1000 m at race pace']},
+  sledPush:   {n:'Sled Push 50 m',      grp:'hyrox', kind:'time', dir:'lower', base:78,  unit:'mm:ss', load:152, loadUnit:'kg',
+               rx:['6 × 25 m moderate, 90 s rest','5 × 50 m at race weight, 2 min','3 × 25 m at 110–120% (167–182 kg), 3 min','2 × 50 m at race weight, 3 min'],
+               cue:'Low hips, short fast steps, arms locked. Never stop once moving — restarting a sled costs more than slowing down.'},
+  sledPull:   {n:'Sled Pull 50 m',      grp:'hyrox', kind:'time', dir:'lower', base:84,  unit:'mm:ss', load:103, loadUnit:'kg',
+               rx:['5 × 25 m, 90 s rest','4 × 50 m at race weight, 2 min','3 × 50 m at race weight, 2 min','2 × 50 m at race weight, 3 min'],
+               cue:'Hand over hand, sit back into it, drive through the heels. Grip fails before legs — that is why swings and rows are in the plan.'},
+  burpee:     {n:'Burpee Broad Jump 80 m',grp:'hyrox',kind:'time',dir:'lower', base:297, unit:'mm:ss', note:'Open men field average 4:57', est:true,
+               rx:['4 × 8 reps, 60 s rest','4 × 10 reps, 60 s rest','3 × 20 m, 90 s rest','2 × 20 m easy'],
+               cue:'Jump less far, cycle faster. Broad jump distance is where people blow their heart rate.'},
+  row:        {n:'Row 1000 m',          grp:'hyrox', kind:'time', dir:'lower', base:291, unit:'mm:ss', note:'Open men field average 4:51', est:true,
+               rx:['3 × 500 m, 90 s rest','4 × 500 m, 75 s rest','2 × 1000 m at race pace, 3 min','1 × 1000 m at race pace'],
+               cue:'Legs, back, arms — then reverse. Rate 24–26, not 30. Strap the feet tight before you start.'},
+  farmers:    {n:'Farmers Carry 200 m', grp:'hyrox', kind:'time', dir:'lower', base:169, unit:'mm:ss', load:24, loadUnit:'kg ea', note:'Open men field average 2:49', est:true,
+               rx:['4 × 40 m, 90 s rest','4 × 50 m, 90 s rest','3 × 100 m, 2 min','2 × 100 m at race weight'],
+               cue:'Shoulders packed, ribs down, quick short steps. Do not let the bells swing — that is wasted grip.'},
+  lunges:     {n:'Sandbag Lunges 100 m',grp:'hyrox', kind:'time', dir:'lower', base:335, unit:'mm:ss', load:20, loadUnit:'kg', note:'Open men field average 5:35', est:true,
+               rx:['3 × 20 m, 90 s rest','4 × 25 m, 90 s rest','3 × 50 m, 2 min','2 × 25 m easy'],
+               cue:'Back knee touches, front shin vertical. Bag high on the shoulders. Short steps are faster than long ones here.'},
+  wallball:   {n:'Wall Balls 100 reps', grp:'hyrox', kind:'time', dir:'lower', base:420, unit:'mm:ss', load:6, loadUnit:'kg', note:'50 reps logged @ 3:30',
+               rx:['3 × 20 reps, 60 s rest','4 × 25 reps, 60 s rest','2 × 50 reps, 2 min','3 × 20 reps easy'],
+               cue:'Squat under it, use the legs to throw. Breathe at the top, not the bottom. Catch and go straight down.'},
   roxzone:    {n:'Roxzone (transitions)',grp:'hyrox',kind:'time', dir:'lower', base:394, unit:'mm:ss', note:'Total transition time. Field average 6:34 — more than most single stations.', est:true},
 
-  /* ============ STRENGTH THAT FEEDS THE STATIONS ============
-     Four lifts, each earning its place:
-     - Romanian deadlift: hip hinge and posterior chain, the engine behind
-       sled pull and rowing. Replaces the conventional deadlift (dropped).
-     - Back squat: legs under fatigue — wall balls, lunges, burpee jumps.
-     - Bent-over row: horizontal pull, the other half of sled pull.
-     - Overhead press: shoulders for wall balls and SkiErg. */
-  rdl:        {n:'Romanian Deadlift 8RM',grp:'str', kind:'kg',   dir:'higher', base:70,  unit:'kg', note:'Hip hinge — drives sled pull and row'},
-  squat:      {n:'Back Squat 5RM',      grp:'str',  kind:'kg',   dir:'higher', base:90,  unit:'kg', note:'Legs under fatigue — wall balls and lunges'},
-  row_bb:     {n:'Bent-Over Row 8RM',   grp:'str',  kind:'kg',   dir:'higher', base:60,  unit:'kg', note:'Horizontal pull — sled pull'},
-  ohp:        {n:'Overhead Press 5RM',  grp:'str',  kind:'kg',   dir:'higher', base:45,  unit:'kg', note:'Shoulders — wall balls and SkiErg'},
+  /* ============ STRENGTH ============ */
+  kbswing:    {n:'KB Swing 20 reps',    grp:'str',  kind:'kg',   dir:'higher', base:24,  unit:'kg', note:'Explosive hip hinge — drives sled pull and row.',
+               rx:['3 × 15, 90 s rest','4 × 15, 90 s rest','4 × 12 heavier, 2 min','3 × 12 easy'],
+               cue:'Hips snap back then forward. Arms stay loose — the bell floats, you never lift it. Shoulders down, ribs closed, spine neutral. If your lower back is working, you are squatting it, not hinging.'},
+  squat:      {n:'Back Squat 5RM',      grp:'str',  kind:'kg',   dir:'higher', base:90,  unit:'kg', note:'Legs under fatigue — wall balls and lunges',
+               rx:['4 × 8 at 70–75% (≈66–71 kg), 2 min','4 × 6 at 80% (≈76 kg), 2.5 min','4 × 4 at 85% (≈81 kg), 3 min','3 × 5 at 70%, 2 min'],
+               cue:'Depth before load — hip crease below the knee. Knees track over toes, chest up, brace before you descend. Film one set from the side if a rep felt off.'},
+  row_bb:     {n:'Bent-Over Row 8RM',   grp:'str',  kind:'kg',   dir:'higher', base:60,  unit:'kg', note:'Horizontal pull — sled pull',
+               rx:['3 × 10, 1 s pause at top, 90 s','4 × 8, 1 s pause, 90 s','4 × 6 heavier, 2 min','3 × 8 easy'],
+               cue:'Hinge to about 45 degrees and hold it — the torso does not rise as you pull. Elbows to the ribs, not flared. If the weight swings up, it is too heavy.'},
+  ohp:        {n:'Overhead Press 5RM',  grp:'str',  kind:'kg',   dir:'higher', base:45,  unit:'kg', note:'Shoulders — wall balls and SkiErg',
+               rx:['3 × 10, 90 s rest','4 × 8, 90 s rest','4 × 6 heavier, 2 min','3 × 8 easy'],
+               cue:'Squeeze glutes and brace so the bar goes up, not your ribs. Head moves back then through at lockout. No leg drive — that is a push press.'},
+  hipthrust:  {n:'Hip Thrust 10RM',     grp:'str',  kind:'kg',   dir:'higher', base:70,  unit:'kg', note:'Posterior chain with zero spinal loading',
+               rx:['3 × 12, 90 s rest','3 × 15, 90 s rest','4 × 10 heavier, 2 min','3 × 10 easy'],
+               cue:'Chin tucked, ribs down, squeeze at the top for a full second. Drive through the heels. Bench at the base of the shoulder blades.'},
 
-  /* ============ CORE + GRIP ============ */
-  farmhold:   {n:'Farmers Hold',        grp:'core', kind:'time', dir:'higher', base:60, unit:'mm:ss', load:24, loadUnit:'kg ea', note:'Grip — farmers carry and sled pull'},
-  plank:      {n:'Plank Hold',          grp:'core', kind:'time', dir:'higher', base:90, unit:'mm:ss', note:'Trunk under load'},
+  /* ============ LEGS & RUNNING DURABILITY ============
+     Plantar flexor force is what protects running mechanics late in the race —
+     elite Hyrox athletes sit around 18 N/kg. Calves are the biggest single gap
+     in most amateur plans. */
+  calfraise:  {n:'Soleus Calf Raise',   grp:'legs', kind:'reps', dir:'higher', base:12,  unit:'reps',
+               note:'Plantar flexors — protects running in the back half',
+               rx:['3 × 12 bodyweight, slow, 2 s pause','3 × 10 loaded, 2 s pause','3 × 8 heavier + 3 × 5 isometric 5 s holds','3 × 12 bodyweight'],
+               cue:'Knee bent about 20 degrees to hit the soleus rather than the calf. Full range, pause at the top, lower slowly. Do these on a step.'},
+  splitsq:    {n:'Split Squat 8/leg',   grp:'legs', kind:'kg',   dir:'higher', base:20,  unit:'kg ea',
+               note:'Single leg — the sandbag lunge station',
+               rx:['3 × 8 per leg, 90 s rest','3 × 10 per leg, 90 s','4 × 6 per leg heavier, 2 min','3 × 8 per leg easy'],
+               cue:'Front shin vertical, back knee down to just above the floor. Torso upright. Control the lowering — that is where the strength is built.'},
+  boxjump:    {n:'Box Jump 5 reps',     grp:'legs', kind:'reps', dir:'higher', base:5,   unit:'reps',
+               note:'Leg stiffness and reactive strength',
+               rx:['3 × 3, step down, 2 min','3 × 5, step down, 2 min','4 × 3 explosive, 2 min','skip — too much impact in taper'],
+               cue:'Land soft and quiet on the box, knees out. Always step down, never jump down. Stop the set the moment height drops.'},
+
+  /* ============ CORE & GRIP ============ */
+  farmhold:   {n:'Farmers Hold',        grp:'core', kind:'time', dir:'higher', base:60, unit:'mm:ss', load:24, loadUnit:'kg ea',
+               note:'Grip endurance',
+               rx:['3 × 45 s, 60 s rest','3 × 60 s, 60 s rest','3 × 45 s heavier, 90 s','2 × 45 s'],
+               cue:'Shoulders packed down, ribs closed. Squeeze the handle actively rather than hanging off it.'},
+  plank:      {n:'Plank Hold',          grp:'core', kind:'time', dir:'higher', base:90, unit:'mm:ss',
+               note:'Trunk under load',
+               rx:['3 × 45 s, 45 s rest','3 × 60 s, 45 s rest','3 × 60 s weighted, 60 s','2 × 45 s'],
+               cue:'Squeeze glutes, tuck the ribs, do not let the hips sag or pike. Quality beats duration.'},
 
   /* ============ CONDITIONING ============ */
-  easyrun:    {n:'Easy Run',            grp:'cond', kind:'dist', dir:'higher', base:6,  unit:'km', note:'Aerobic base'},
+  easyrun:    {n:'Easy Run',            grp:'cond', kind:'dist', dir:'higher', base:6,  unit:'km', note:'Aerobic base',
+               rx:['30–45 min conversational','35–50 min conversational','30–45 min conversational','25–30 min very easy'],
+               cue:'You should be able to speak in full sentences. If you cannot, slow down — this day is not meant to hurt.'},
 };
 
 const GRP = {
   hyrox:{n:'Hyrox Race Stations', c:'var(--gold)'},
   str:  {n:'Strength', c:'var(--blue)'},
-  core: {n:'Core & Grip', c:'var(--green)'},
+  legs: {n:'Legs & Durability', c:'var(--green)'},
+  core: {n:'Core & Grip', c:'var(--amber)'},
   cond: {n:'Conditioning', c:'var(--muted2)'},
 };
 
 /* ---------------- WEEKLY TEMPLATE (Mon/Wed/Fri full, Tue/Thu run) ---------------- */
 const WK = {
   /* ===================================================================
-     WEEKLY STRUCTURE — two hard days, not three.
-
-     Why: running is ~58% of his race time, stations ~35%. A 2025 study
-     of recreational Hyrox athletes found finish time correlated with
-     VO2max (rho -0.71) and endurance volume (rho -0.68); grip strength
-     (0.09) and resistance volume (0.34) were NOT significant. Station
-     time correlated with nothing. Coaching sources converge on 2 hard
-     sessions a week with >=48h between, and 70-80% of work easy.
-
-     Mon = strength + short circuit (hard)
-     Tue = easy run (genuinely easy)
-     Wed = threshold running, the single highest-value session
-     Thu = easy run
-     Fri = race simulation (hard)
-     Sat = optional accessory, Sun = rest
+     Two hard days. Running is ~58% of race time; stations ~35%.
+     Sessions are built to genuinely fit 40 minutes — coaching sources
+     suggest 45-90 min, so this is deliberately trimmed rather than
+     a full programme squeezed in.
      =================================================================== */
-  1:{n:'Strength + Circuit', tag:'Heavy then hard · 40 min', ex:['rdl','squat','sledPush','sledPull','wallball'],
-     circuitFrom:2,
-     brief:'Lift heavy first: RDL and squat, full rest between sets — this protects your running mechanics late in the race, which is what strength actually buys you. Then the last three back to back, no rest.'},
+  1:{n:'Strength + Circuit', tag:'Heavy then hard · 40 min', ex:['kbswing','squat','splitsq','sledPush','wallball'],
+     circuitFrom:3,
+     brief:'Swings, squats and split squats first with full rest — about 25 minutes. Then the last two back to back, no rest, for roughly 10 minutes of circuit. Heavy work protects your running mechanics late in the race; that is what strength actually buys you.'},
   2:{n:'Easy Run',        tag:'Aerobic · 30–45 min', ex:['easyrun'],
-     brief:'Conversational pace — you should be able to speak in full sentences. This is not a soft option: easy aerobic volume is the strongest predictor of a fast Hyrox.'},
-  3:{n:'Threshold Run',   tag:'Quality · 40 min', ex:['run1k','ski','plank'],
-     brief:'3 × 6 min at threshold (comfortably hard, not racing), 75 s jog between. Then SkiErg. One second per km off your run pace is eight seconds off race day — nothing else in training pays back that fast.'},
+     brief:'Conversational pace. Easy aerobic volume is the strongest single predictor of a fast Hyrox — this is not a soft option.'},
+  3:{n:'Threshold Run',   tag:'Quality · 40 min', ex:['run1k','row','calfraise','plank'],
+     brief:'The highest-value session of your week. Threshold running first while fresh, then the rower, then calves and core. One second per km off your pace is eight seconds off race day.'},
   4:{n:'Easy Run',        tag:'Aerobic · 30–45 min', ex:['easyrun'],
      brief:'Second easy day. Keep it genuinely easy — Friday is the hard one and you cannot fake recovery.'},
-  5:{n:'Race Simulation', tag:'Full effort · 40 min', ex:['run1k','ski','run1k','sledPush','run1k','sledPull','run1k','burpee'],
+  5:{n:'Race Simulation', tag:'Full effort · 40 min', ex:['run1k','ski','run1k','farmers','run1k','lunges'],
      brief:'Official race order, compromised running. Run at your 1 km best + 10–15 s/km, not flat out. Practise transitions: no standing still, know your grip before you arrive.',
      half:true, roxDrill:true},
-  6:{n:'Optional Accessory',tag:'Top-up · 30 min', ex:['row_bb','ohp','farmhold','plank'],
-     brief:'Only if Friday felt easy. Pull, press, grip, trunk. If you are tired, skip it — the week already has two hard days and that is the ceiling.'},
+  6:{n:'Optional Accessory',tag:'Top-up · 30 min', ex:['hipthrust','row_bb','ohp','farmhold','boxjump'],
+     brief:'Only if Friday felt easy. Posterior chain, pull, press, grip, a little power. If you are tired, skip it — the week already has two hard days and that is the ceiling.'},
   0:{n:'Rest',            tag:'Recovery', ex:[], brief:'Full rest. Adaptation happens now, not in the gym.'},
 };
 
@@ -420,6 +582,8 @@ const WK = {
 /* Blocks counted BACKWARD from race day, so the taper always lands
    in the right place no matter when training started. */
 function blockOf(){
+  if(racePassed()) return {n:'Season complete',
+    f:'Race day has passed. Set a new race date to start a fresh block.', i:6, out:0, done:true};
   const out=weeksOut();
   if(out<=1)  return {n:'Race Week',          f:'Nothing you do now adds fitness. Move, sleep, eat, rehearse transitions.', i:5, out};
   if(out<=3)  return {n:'Block 4 · Taper',    f:'10–14 days at about half the volume, intensity held. Sharpen, do not dig.', i:4, out};
@@ -457,27 +621,32 @@ function parseVal(str,kind){
   }
   const n=parseFloat(str); return isNaN(n)?null:n;
 }
-function daysTo(d){ return Math.max(0, Math.ceil((d - new Date())/864e5)); }
+/* Signed: negative once the date has passed. daysTo used to clamp at 0, which
+   left weeksOut pinned at 1 forever and the app stuck in "Race Week" months
+   after race day. Callers that want the old behaviour use daysToClamped. */
+function daysTo(d){ return Math.ceil((d - new Date())/864e5); }
+function daysToClamped(d){ return Math.max(0, daysTo(d)); }
+function racePassed(){ return daysTo(RACE) < 0; }
 function weekNo(){ const w=Math.floor((new Date()-PLAN_START)/(7*864e5))+1; return Math.max(1,w); }
 /* Weeks remaining until race day — periodisation is anchored to the RACE,
    not to when the app happened to be installed. 1 = race week. */
-function weeksOut(){ return Math.max(1, Math.ceil(daysTo(RACE)/7)); }
+function weeksOut(){ return Math.max(1, Math.ceil(daysToClamped(RACE)/7)); }
 function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
 /* Friday's session changes with the block: a full simulation is a hard,
    costly session. Base = short sim. Build = half sim. Simulation block =
    full race order. Peak = sharpening only. */
 const FRIDAY_BY_BLOCK={
-  /* Phase structure follows the standard block model: strength emphasis
-     first, then strength-endurance, then simulation, then taper.
-     Taper is 10-14 days at ~50% volume with intensity held. */
-  1:{n:'Mini Simulation',  tag:'Moderate · 40 min', ex:['run1k','ski','run1k','sledPush'], half:true, roxDrill:true,
-     brief:'Short race-order block. The point is learning to run on tired legs and rehearsing transitions — not a maximal effort.'},
-  2:{n:'Half Simulation',  tag:'Hard · 40 min', ex:['run1k','ski','run1k','sledPush','run1k','sledPull','run1k','burpee'], half:true, roxDrill:true,
-     brief:'Official race order. Hold run pace at 1 km best + 10–15 s/km. Every station follows a run — that is the whole point.'},
+  /* Every block now touches stations that were previously never scheduled
+     (row, farmers carry, sandbag lunges) — they are scored the same as the
+     sleds on race day, and were the three with no data from him. */
+  1:{n:'Mini Simulation',  tag:'Moderate · 40 min', ex:['run1k','ski','run1k','farmers','run1k','lunges'], half:true, roxDrill:true,
+     brief:'Short race-order block, built around the two stations you have never timed. Not a maximal effort — the point is getting a real number and learning to move on tired legs.'},
+  2:{n:'Half Simulation',  tag:'Hard · 40 min', ex:['run1k','ski','run1k','sledPush','run1k','row','run1k','farmers'], half:true, roxDrill:true,
+     brief:'Official race order. Hold run pace at your 1 km best + 10–15 s/km. Every station follows a run — that is the whole point.'},
   3:{n:'Race Simulation',  tag:'Full effort · 40 min', ex:['run1k','ski','run1k','sledPush','run1k','sledPull','run1k','burpee','run1k','row'], half:true, roxDrill:true,
      brief:'Game speed. All runs within 10% of each other — consistency predicts race day better than any single split.'},
   4:{n:'Race Sharpener',   tag:'Short · 25 min', ex:['run1k','sledPush','run1k','wallball'], half:true, roxDrill:true,
-     brief:'Race pace, half the volume. Intensity stays, volume drops. You are rehearsing now, not building. Stop while it still feels easy.'},
+     brief:'Race pace, half the volume. Intensity stays, volume drops. You are rehearsing now, not building.'},
   5:{n:'Race Rehearsal',   tag:'Easy · 20 min', ex:['run1k','ski'], half:true, roxDrill:true,
      brief:'Movement and transitions only. Nothing you do this week adds fitness; you can only subtract it.'},
 };
@@ -488,6 +657,78 @@ function dayPlan(d){
 }   // 1Mon..5Fri, 0Sun rest, 6Sat optional
 function dowName(d){ return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]; }
 function longDate(d){ return dowName(d)+', '+d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}); }
+
+/* ---------------- INPUT SANITY ----------------
+   A mistyped value becomes your best, then your target, and because targets
+   ratchet it never comes back down — every later session reads as a miss.
+   So every entry is range-checked against the exercise's own baseline. */
+function sane(k, v){
+  const e=EX[k]; if(!e||v==null||isNaN(v)) return {ok:false, why:'Not a number'};
+  if(v<=0) return {ok:false, why:'Must be greater than zero'};
+  const base=e.base||0;
+  // generous bounds: a quarter to four times baseline covers any real progress
+  const lo = base*0.25, hi = base*4;
+  if(base && v<lo) return {ok:false, soft:true, why:`${fmt(v,e.kind)} is far below your baseline of ${fmt(base,e.kind)} — check the units`};
+  if(base && v>hi) return {ok:false, soft:true, why:`${fmt(v,e.kind)} is far above your baseline of ${fmt(base,e.kind)} — check the units`};
+  return {ok:true};
+}
+
+/* ---------------- MACHINE SETTINGS ----------------
+   A time only means something alongside the setting it was set at.
+   Defaults are remembered in S.settings.machines and pre-filled. */
+const MACHINES = {
+  curve: {n:'Curved treadmill', fields:[
+    {k:'level', label:'Resistance / gear', ph:'3', hint:'Level you ran at'}]},
+  ski:   {n:'SkiErg', fields:[
+    {k:'damper', label:'Damper', ph:'5', hint:'1–10'},
+    {k:'drag',   label:'Drag factor', ph:'110', hint:'Optional'}]},
+  rower: {n:'Rower', fields:[
+    {k:'damper', label:'Damper', ph:'5', hint:'1–10'},
+    {k:'drag',   label:'Drag factor', ph:'120', hint:'Optional'},
+    {k:'rate',   label:'Stroke rate', ph:'26', hint:'spm, optional'}]},
+};
+/* which exercises run on which machine */
+const EX_MACHINE = { run1k:'curve', easyrun:'curve', ski:'ski', row:'rower' };
+
+function machineOf(k){ const m=EX_MACHINE[k]; return m?MACHINES[m]:null; }
+function machineKey(k){ return EX_MACHINE[k]||null; }
+function savedMachine(k){
+  const mk=machineKey(k); if(!mk) return {};
+  return (S.settings.machines&&S.settings.machines[mk])||{};
+}
+function saveMachine(k, vals){
+  const mk=machineKey(k); if(!mk) return;
+  S.settings.machines = S.settings.machines||{};
+  S.settings.machines[mk] = Object.assign({}, S.settings.machines[mk], vals);
+}
+/* a one-line summary for display, e.g. "Damper 5 · 110 df" */
+function machineSummary(k, vals){
+  const m=machineOf(k); if(!m) return '';
+  const v=vals||savedMachine(k);
+  return m.fields.map(f=>v[f.k]?`${f.label==='Resistance / gear'?'Level':f.label} ${v[f.k]}`:null)
+          .filter(Boolean).join(' · ');
+}
+
+/* How many sets does the current prescription call for?
+   Parses the leading "3 × 15" or "4 × 8" out of the rx string. */
+function setsOf(k){
+  const rx=rxOf(k); if(!rx) return 1;
+  const m=rx.match(/^\s*(\d+)\s*[×x]/);
+  return m?Math.max(1,Math.min(10,parseInt(m[1],10))):1;
+}
+function repsOf(k){
+  const rx=rxOf(k); if(!rx) return null;
+  const m=rx.match(/^\s*\d+\s*[×x]\s*([\d.]+)/);
+  return m?m[1]:null;
+}
+
+/* The prescription for this exercise in the current block.
+   rx is [base, build, simulation, taper]; blockOf().i is 1..5. */
+function rxOf(k, blockIdx){
+  const e=EX[k]; if(!e||!e.rx) return null;
+  const i = Math.min(Math.max((blockIdx||blockOf().i)-1, 0), e.rx.length-1);
+  return e.rx[i];
+}
 
 /* Target = the scaled target if one exists, else the baseline — but never
    easier than what you have already done. A target you have beaten is not a
@@ -633,7 +874,8 @@ function weightChart(){
    ===================================================================== */
 function hitRate(logs){
   let hit=0,tot=0;
-  logs.forEach(l=>{ Object.keys(l.results||{}).forEach(k=>{
+  // easy / substitute days keep your consistency but never judge your targets
+  logs.filter(l=>!l.easy).forEach(l=>{ Object.keys(l.results||{}).forEach(k=>{
     if(!EX[k])return;
     // judge each session against the target it faced on the day, not today's
     const r=isHitAsOf(k,l.results[k],l.date); if(r!==null){tot++; if(r)hit++;}
@@ -765,13 +1007,13 @@ function coachFix(k){
     run1k:'Add one extra 1 km rep on Wednesday before you touch the pace target.',
     ski:'Shorten the stroke and raise the rate — most lost time on SkiErg is a slow catch, not weak legs.',
     sledPush:'Lower your hips and take shorter, faster steps. Drop the load 10 kg and chase speed for two weeks.',
-    sledPull:'This is grip and lats. Romanian deadlift and bent-over row feed it directly — push those.',
+    sledPull:'This is grip and lats. KB swings and bent-over row feed it directly — push those.',
     burpee:'Jump less far, cycle faster. Broad jump distance is where people blow their heart rate.',
     row:'Hold the stroke rate down and drive with legs. Rate 24–26, not 30.',
     farmers:'Pure grip. Add farmers holds to the end of every strength session.',
     lunges:'Lunges fail from quads, not lungs. Split squats and step-ups are the fix.',
     wallball:'Breathe at the top, not the bottom. Thrusters build the engine for this.',
-    rdl:'Hinge, do not squat it. Add reps before you add weight.',
+    kbswing:'Hips snap, arms stay loose — the bell floats, you do not lift it. Add reps before you add weight.',
     squat:'Depth before load. Film one set from the side.',
     pullup:'Negatives. Three slow five-second lowers at the end of each session.',
   };
@@ -822,7 +1064,8 @@ function weekStrip(now){
     const past = key < todayKey();
     // status: done (green) | missed (red, a past training day with no log) | today | planned | rest
     let cls='m', mark='';
-    if(lg){cls='g';mark='✓';}
+    if(lg && lg.easy){cls='b';mark='~';}          // easy / substitute day
+    else if(lg){cls='g';mark='✓';}
     else if(isToday && pl.ex.length){cls='a';mark='•';}
     else if(past && pl.ex.length){cls='r';mark='—';}
     else if(pl.ex.length){cls='m';mark='';}
@@ -871,12 +1114,16 @@ function vHome(){
   <div class="hero-h">${loggedToday?'Session logged':plan.ex.length?plan.n:'Rest day'}</div>
   <div class="hero-s">${loggedToday?'Done for today. '+plan.brief:plan.brief}</div>
   <div class="hero-row">
-    <span class="chip g"><em>${d}</em><span>Days out</span></span>
-    <span class="chip"><em>${bl.out}</em><span>Weeks left</span></span>
+    <span class="chip g"><em>${bl.done?'—':d}</em><span>${bl.done?'Race done':'Days out'}</span></span>
+    <span class="chip"><em>${bl.done?'—':bl.out}</em><span>Weeks left</span></span>
     <span class="chip"><em>${bl.i}<s style="font-size:12px;color:var(--muted);text-decoration:none;font-weight:700">/4</s></em><span>Block</span></span>
   </div>
   ${plan.ex.length?`<button class="btn" style="margin-top:16px" onclick="wkStart()">${loggedToday?'Train again':'Start '+plan.n}</button>
-    <button class="btn gh sm" style="margin-top:9px" onclick="openLog()">Enter times manually</button>`:''}
+    <div style="display:flex;gap:8px;margin-top:9px">
+      <button class="btn gh sm" style="flex:1" onclick="openLog()">Enter manually</button>
+      <button class="btn gh sm" style="flex:1" onclick="openEasy()">Not feeling it</button>
+    </div>`:
+    `<div style="margin-top:14px"><button class="btn gh sm" onclick="openEasy()">Log something anyway</button></div>`}
   </div>`;
 
   o+=`<div class="sec">At a glance</div>
@@ -926,14 +1173,29 @@ function vTrain(){
   const now=new Date(), plan=dayPlan(now), w=weekNo(), bl=blockOf();
   const loggedToday=S.logs.some(l=>l.date===todayKey());
 
+  /* ---- unfinished workout waiting to be resumed ---- */
+  let o='';
+  const stored=(typeof wkStored==='function')?wkStored():null;
+  if(stored){
+    const mins=Math.max(1,Math.round((Date.now()-stored.savedAt)/60000));
+    const nDone=Object.keys(stored.results||{}).length;
+    o+=`<div class="card" style="border-color:rgba(245,158,11,.4);padding:15px 16px">
+      <div class="card-t" style="color:var(--amber)">Unfinished session</div>
+      <div style="font-size:13px;color:var(--muted2);line-height:1.55;margin-bottom:13px">
+      ${stored.plan.n} — paused ${mins} min ago${nDone?`, ${nDone} exercise${nDone>1?'s':''} logged`:''}.</div>
+      <button class="btn sm" onclick="wkResume()">Resume</button>
+      <button class="btn gh sm" style="margin-top:8px" onclick="wkDiscardStored()">Discard</button>
+    </div>`;
+  }
+
   /* ---- race countdown, moved here from Coach ---- */
-  let o=`<div class="card" style="padding:14px 16px;margin-bottom:12px" onclick="go('coach')">
+  o+=`<div class="card" style="padding:14px 16px;margin-bottom:12px" onclick="go('coach')">
     <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
-      <div><span style="font-weight:800;font-size:19px;letter-spacing:-.5px;color:var(--gold)">${bl.out}</span>
-      <span style="font-weight:700;font-size:12px;color:var(--muted);margin-left:5px">weeks to race</span></div>
+      <div><span style="font-weight:800;font-size:19px;letter-spacing:-.5px;color:var(--gold)">${bl.done?'✓':bl.out}</span>
+      <span style="font-weight:700;font-size:12px;color:var(--muted);margin-left:5px">${bl.done?'race complete':'weeks to race'}</span></div>
       <span class="pill m">${bl.n}</span>
     </div>
-    <div class="bar" style="margin-top:10px"><i style="width:${Math.min(100,Math.max(3,(1-bl.out/19)*100))}%"></i></div>
+    <div class="bar" style="margin-top:10px"><i style="width:${bl.done?100:Math.min(100,Math.max(3,(1-bl.out/19)*100))}%"></i></div>
     <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-top:9px">${bl.f}</div>
   </div>`;
 
@@ -944,7 +1206,11 @@ function vTrain(){
     <div class="hero-s">${plan.brief}</div>
     <div class="hero-row pills"><span class="chip g" style="background:rgba(255,215,0,.13);border-color:rgba(255,215,0,.3);color:var(--gold)">${plan.tag}</span><span class="chip">${plan.ex.length} exercise${plan.ex.length===1?'':'s'}</span>${loggedToday?'<span class="chip" style="background:rgba(32,166,118,.16);border-color:rgba(32,166,118,.35);color:var(--green)">Logged</span>':''}</div>
     ${plan.ex.length?`<button class="btn" style="margin-top:16px" onclick="wkStart()">${loggedToday?'Train again':'Start workout'}</button>
-    <button class="btn gh sm" style="margin-top:9px" onclick="openLog()">Enter times manually</button>`:''}
+    <div style="display:flex;gap:8px;margin-top:9px">
+      <button class="btn gh sm" style="flex:1" onclick="openLog()">Enter manually</button>
+      <button class="btn gh sm" style="flex:1" onclick="openEasy()">Not feeling it</button>
+    </div>`:
+    `<div style="margin-top:14px"><button class="btn gh sm" onclick="openEasy()">Log something anyway</button></div>`}
   </div>`;
 
   if(plan.ex.length){
@@ -953,8 +1219,10 @@ function vTrain(){
       const e=EX[k], t=targetOf(k), b=bestOf(k);
       const beat = b!=null && (e.dir==='lower' ? b<=t : b>=t);
       const inCircuit = plan.circuitFrom!=null && i>=plan.circuitFrom;
+      const rx=rxOf(k);
       o+=`<div class="row lead" onclick="openEx('${k}')"><div class="row-main">
       <div class="row-t">${e.n}${inCircuit?' <span class="pill a" style="margin-left:5px;padding:2px 6px;font-size:9px">CIRCUIT</span>':''}</div>
+      ${rx?`<div class="rxline">${rx}</div>`:''}
       <div class="row-s">${e.load?e.load+' '+e.loadUnit+' · ':''}${b==null?(e.est?'Estimate — no data yet':'No data yet'):beat?'Your best — beat it today':'Best '+fmt(b,e.kind)}</div>
       </div><div class="row-r"><div class="row-v mono">${fmt(t,e.kind)}</div><div class="row-vs">TARGET</div></div>
       <svg class="caret" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l6 6-6 6"/></svg></div>`;
@@ -1055,7 +1323,13 @@ function vProgress(){
           <div style="text-align:center"><div class="mono" style="font-weight:800;font-size:14px;color:var(--gold)">${fmt(t,e.kind)}</div><div class="stat-l">Target</div></div>
           <div style="text-align:center"><div class="mono" style="font-weight:800;font-size:14px">${fmt(b,e.kind)}</div><div class="stat-l">Best</div></div>
           <div style="text-align:center"><div class="mono" style="font-weight:800;font-size:14px;color:var(--muted)">${fmt(e.base,e.kind)}</div><div class="stat-l">Baseline</div></div>
-        </div>`:`<p style="font-size:12.5px;color:var(--muted);line-height:1.6;padding:4px 0 10px">
+        </div>
+        ${(()=>{const withSets=S.logs.filter(l=>l.sets&&l.sets[k]&&l.sets[k].length>1)
+            .sort((a,b)=>a.date<b.date?1:-1).slice(0,5);
+          if(!withSets.length) return '';
+          return `<div class="hr"></div><div class="card-t">Recent sets</div>`+
+            withSets.map(l=>`<div class="setsline"><b>${l.date.slice(5).replace('-','/')}</b> ${l.sets[k].map(v=>fmt(v,e.kind)).join(' · ')}</div>`).join('');
+        })()}`:`<p style="font-size:12.5px;color:var(--muted);line-height:1.6;padding:4px 0 10px">
           ${e.est?`No data from you yet \u2014 the plan is using the Open men's field average of <b style="color:var(--muted2)">${fmt(e.base,e.kind)}</b>. Log it once and this becomes your number.`:`Nothing logged yet. Baseline is <b style="color:var(--muted2)">${fmt(e.base,e.kind)}</b>.`}
         </p>`}
         <button class="btn gh sm" style="margin-top:12px" onclick="event.stopPropagation();openEx('${k}')">Log ${e.n}</button>
@@ -1107,7 +1381,7 @@ function vProfile(){
     if(wt){
       o+=`<div class="sec">Relative strength</div>
       <p style="font-size:12.5px;color:var(--muted);line-height:1.55;margin:-4px 2px 12px">Strength per kilo of body weight — what actually moves a sled.</p>`;
-      [['squat',1.7],['rdl',1.5],['row_bb',1.0],['ohp',0.9]].forEach(([k,goal])=>{
+      [['squat',1.7],['row_bb',1.0],['ohp',0.9],['kbswing',0.4]].forEach(([k,goal])=>{
         const v=latestOf(k)||EX[k].base; const r=v/wt; const pctg=Math.min(100,r/goal*100);
         o+=`<div class="card" style="padding:14px">
         <div style="display:flex;justify-content:space-between;align-items:baseline">
@@ -1142,7 +1416,8 @@ function vProfile(){
   <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">Race day</span><b>1 March 2027</b></div>
   <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:9px"><span style="color:var(--muted)">Last backup</span><b>${S.settings.lastBackupCount!=null?'at '+S.settings.lastBackupCount+' sessions':'never'}</b></div>
   <div class="hr"></div>
-  <button class="btn ${backupDue()?'':'gh'} sm" onclick="exportData()">Back up my training</button>
+  <button class="btn gh sm" onclick="openHistory()">Session history</button>
+  <button class="btn ${backupDue()?'':'gh'} sm" style="margin-top:9px" onclick="exportData()">Back up my training</button>
   <button class="btn gh sm" style="margin-top:9px" onclick="openRestore()">Restore from backup</button>
   <button class="btn gh sm" style="margin-top:9px;color:var(--red);border-color:rgba(239,68,68,.35)" onclick="resetAll()">Reset everything</button></div>`;
 
@@ -1262,19 +1537,122 @@ function fieldHTML(k){
   const e=EX[k], t=targetOf(k), l=latestOf(k);
   const ph = e.kind==='time' ? 'e.g. 1:18' : e.kind==='kg' ? 'kg' : e.kind==='dist' ? 'km' : 'reps';
   const un = e.kind==='time'?'mm:ss':e.kind==='kg'?'kg':e.kind==='dist'?'km':'reps';
+  const nSets = setsOf(k), reps = repsOf(k);
+  const mach = machineOf(k), mv = savedMachine(k);
+
+  /* machine settings — remembered, pre-filled, collapsed by default */
+  const machHTML = mach ? `
+  <div class="machbox">
+    <div class="machhead" onclick="toggleMach('${k}')">
+      <span>${mach.n}</span>
+      <span class="machsum" id="msum_${k}">${machineSummary(k)||'Tap to set'}</span>
+    </div>
+    <div class="machfields" id="mf_${k}" style="display:none">
+      ${mach.fields.map(f=>`<div class="machrow">
+        <label>${f.label}<em>${f.hint}</em></label>
+        <input type="number" inputmode="decimal" step="any" id="m_${k}_${f.k}"
+          value="${mv[f.k]!=null?mv[f.k]:''}" placeholder="${f.ph}" oninput="machChanged('${k}')">
+      </div>`).join('')}
+      <div class="machnote">Remembered for next time. A time only means something next to the setting it was set at.</div>
+    </div>
+  </div>` : '';
+
+  /* per-set rows when the prescription calls for more than one */
+  let setsHTML='';
+  if(nSets>1){
+    setsHTML = `<div class="sets" id="sets_${k}">
+      ${Array.from({length:nSets},(_,i)=>`
+        <div class="setrow" id="sr_${k}_${i}">
+          <button class="settick" id="st_${k}_${i}" onclick="toggleSet('${k}',${i})" aria-label="Set ${i+1}">${i+1}</button>
+          <input ${e.kind==='time'?'type="text" inputmode="numeric"':'type="number" inputmode="decimal" step="any"'}
+            id="sv_${k}_${i}" placeholder="${reps&&e.kind!=='time'?e.kind==='kg'?'kg':reps:ph}"
+            oninput="setChanged('${k}')">
+          <span class="setunit">${un}</span>
+        </div>`).join('')}
+      <div class="setsdone" id="sd_${k}">0 of ${nSets} sets logged</div>
+    </div>`;
+  }
+
   return `<div class="field">
   <div class="flabel"><span>${e.n}</span><span>Target ${fmt(t,e.kind)}${e.load?' @ '+e.load+' '+e.loadUnit:''}</span></div>
-  <div class="inrow">
+  ${rxOf(k)?`<div class="rxbox">${rxOf(k)}</div>`:''}
+  ${machHTML}
+  ${nSets>1 ? setsHTML : `<div class="inrow">
     <input ${e.kind==='time'?'type="text" inputmode="numeric"':'type="number" inputmode="decimal" step="any"'}
       id="in_${k}" placeholder="${ph}" oninput="liveFB('${k}')" onchange="liveFB('${k}')">
     <div class="unit">${un}</div>
-  </div>
-  <div class="fb" id="fb_${k}">${l!=null?'Last session '+fmt(l,e.kind):'No previous data'}</div></div>`;
+  </div>`}
+  <div class="fb" id="fb_${k}">${l!=null?'Last session '+fmt(l,e.kind):'No previous data'}</div>
+  ${e.cue?`<div style="margin-top:9px;padding:11px 13px;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.22);border-radius:12px">
+    <div style="font-weight:800;font-size:9.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--blue);margin-bottom:5px">Form</div>
+    <div style="font-size:11.5px;line-height:1.55;color:var(--muted2)">${e.cue}</div></div>`:''}
+  </div>`;
 }
+
+function toggleMach(k){
+  const el=document.getElementById('mf_'+k);
+  el.style.display = el.style.display==='none' ? 'block' : 'none';
+}
+function machChanged(k){
+  const m=machineOf(k); if(!m) return;
+  const vals={};
+  m.fields.forEach(f=>{const el=document.getElementById('m_'+k+'_'+f.k); if(el&&el.value!=='') vals[f.k]=parseFloat(el.value);});
+  saveMachine(k, vals); save();
+  const sum=document.getElementById('msum_'+k);
+  if(sum) sum.textContent = machineSummary(k, vals) || 'Tap to set';
+}
+/* mark a set done without typing a value — uses the prescribed number */
+function toggleSet(k,i){
+  const btn=document.getElementById('st_'+k+'_'+i);
+  const inp=document.getElementById('sv_'+k+'_'+i);
+  const on=btn.classList.toggle('on');
+  if(on && !inp.value){
+    const e=EX[k];
+    // default to the target for a timed/loaded lift, or the prescribed reps
+    inp.value = e.kind==='time' ? fmt(targetOf(k),'time')
+              : e.kind==='kg'   ? targetOf(k)
+              : (repsOf(k)||targetOf(k));
+  }
+  if(!on) inp.value='';
+  setChanged(k);
+}
+function setChanged(k){
+  const n=setsOf(k); let done=0; const vals=[];
+  for(let i=0;i<n;i++){
+    const inp=document.getElementById('sv_'+k+'_'+i);
+    const btn=document.getElementById('st_'+k+'_'+i);
+    if(!inp) continue;
+    const has = inp.value.trim()!=='';
+    if(btn) btn.classList.toggle('on', has);
+    if(has){ done++; const v=parseVal(inp.value, EX[k].kind); if(v!=null) vals.push(v); }
+  }
+  const sd=document.getElementById('sd_'+k);
+  if(sd){
+    sd.textContent = done+' of '+n+' sets logged'+(done===n?' — complete':'');
+    sd.className = 'setsdone'+(done===n?' done':'');
+  }
+  // feed the best set into the normal feedback line
+  if(vals.length){
+    const e=EX[k];
+    const best = e.dir==='lower'?Math.min(...vals):Math.max(...vals);
+    liveFBValue(k, best);
+  } else {
+    const el=document.getElementById('fb_'+k); const l=latestOf(k);
+    if(el){ el.className='fb'; el.textContent = l!=null?'Last session '+fmt(l,EX[k].kind):'No previous data'; }
+  }
+}
+
 function liveFB(k){
+  const e=EX[k];
+  const inp=document.getElementById('in_'+k);
+  liveFBValue(k, inp?parseVal(inp.value, e.kind):null);
+}
+function liveFBValue(k, v){
   const e=EX[k], el=document.getElementById('fb_'+k);
-  const v=parseVal(document.getElementById('in_'+k).value, e.kind);
+  if(!el) return;
   if(v==null){ const l=latestOf(k); el.className='fb'; el.textContent=l!=null?'Last session '+fmt(l,e.kind):'No previous data'; return; }
+  const chk=sane(k,v);
+  if(!chk.ok){ el.className='fb r'; el.textContent='⚠ '+chk.why; return; }
   const t=targetOf(k), hit=isHit(k,v);
   const diff=Math.abs(v-t), dp=t?Math.abs((v-t)/t*100):0;
   if(hit){
@@ -1310,16 +1688,50 @@ function openEx(k){
 }
 function saveSession(){
   const res={}; let n=0;
+  const setDetail={}, rejected=[];
   shKeys.forEach(k=>{
-    const el=document.getElementById('in_'+k); if(!el)return;
-    const v=parseVal(el.value, EX[k].kind);
-    if(v!=null&&v>0){ res[k]=v; n++; }
+    const e=EX[k];
+    const nSets=setsOf(k);
+    if(nSets>1){
+      const vals=[];
+      for(let i=0;i<nSets;i++){
+        const si=document.getElementById('sv_'+k+'_'+i);
+        if(!si) continue;
+        const sv=parseVal(si.value, e.kind);
+        if(sv!=null&&sv>0) vals.push(sv);
+      }
+      const bad=vals.find(v=>!sane(k,v).ok);
+      if(bad!=null){ rejected.push(e.n+': '+sane(k,bad).why); }
+      else if(vals.length){
+        res[k] = e.dir==='lower'?Math.min(...vals):Math.max(...vals);
+        setDetail[k] = vals;        // keep every set, not just the best
+        n++;
+      }
+    } else {
+      const el=document.getElementById('in_'+k); if(!el)return;
+      const v=parseVal(el.value, e.kind);
+      if(v!=null&&v>0){
+        const chk=sane(k,v);
+        if(!chk.ok){ rejected.push(e.n+': '+chk.why); }
+        else { res[k]=v; n++; }
+      }
+    }
   });
+  if(rejected.length){ toast(rejected[0]); return; }
   if(!n){ toast('Enter at least one result'); return; }
   const key=todayKey();
+  // snapshot the machine settings any logged exercise was performed at
+  const machines={};
+  Object.keys(res).forEach(k=>{ const mk=machineKey(k); if(mk) machines[mk]=savedMachine(k); });
   const ex=S.logs.find(l=>l.date===key);
-  if(ex){ ex.results=Object.assign(ex.results||{},res); ex.name=dayPlan(new Date()).n; }
-  else S.logs.push({date:key, week:weekNo(), name:dayPlan(new Date()).n, results:res});
+  if(ex){
+    ex.results=Object.assign(ex.results||{},res); ex.name=dayPlan(new Date()).n;
+    ex.sets=Object.assign(ex.sets||{},setDetail);
+    ex.machines=Object.assign(ex.machines||{},machines);
+  }
+  else S.logs.push({date:key, week:weekNo(), name:dayPlan(new Date()).n, results:res,
+                    sets:Object.keys(setDetail).length?setDetail:undefined,
+                    machines:Object.keys(machines).length?machines:undefined});
   save(); closeSheet();
   const hits=Object.keys(res).filter(k=>isHit(k,res[k])).length;
   toast(`Saved · ${hits}/${n} target${n===1?'':'s'} hit`);
@@ -1347,6 +1759,170 @@ function saveProfile(){
   if(w){ const k=todayKey(); const ex=S.weights.find(x=>x.d===k); if(ex)ex.kg=w; else S.weights.push({d:k,kg:w}); }
   save(); closeSheet(); toast('Profile saved'); render();
 }
+/* =====================================================================
+   EASY DAY — for when the planned session is too much.
+   Two routes: a reduced version of today, or log whatever you actually did.
+   Both save with easy:true, which keeps consistency but is excluded from
+   hit rate, so an easy day never makes the scaler think targets are wrong.
+   ===================================================================== */
+function openEasy(){
+  const plan=dayPlan(new Date());
+  const half=plan.ex.slice(0, Math.max(1,Math.ceil(plan.ex.length/2)));
+  shMode='easy';
+  document.getElementById('shTitle').textContent='Not feeling it today';
+  document.getElementById('shSub').textContent='Something beats nothing — keep the streak';
+  document.getElementById('shBody').innerHTML=`
+  <p style="font-size:13px;color:var(--muted2);line-height:1.6;padding:2px 0 14px">
+  Showing up at 60% is worth more than a missed day. Pick whichever is honest.</p>
+
+  ${plan.ex.length?`<div class="card" style="padding:14px">
+    <div class="card-t" style="color:var(--gold)">Cut today in half</div>
+    <div style="font-size:12.5px;color:var(--muted2);line-height:1.55;margin-bottom:12px">
+    ${half.map(k=>EX[k].n).join(' · ')} — same targets, half the work.</div>
+    <button class="btn sm" onclick="startEasy()">Start short version</button>
+  </div>`:''}
+
+  <div class="card" style="padding:14px">
+    <div class="card-t">Easy alternative</div>
+    <div style="font-size:12.5px;color:var(--muted2);line-height:1.55;margin-bottom:12px">
+    A 30-minute easy run or walk. Aerobic volume is the strongest predictor of a fast Hyrox — this is not a wasted day.</div>
+    <div class="inrow"><input type="number" inputmode="decimal" step="0.1" id="ez_km" placeholder="5" style="text-align:center">
+    <div class="unit">km</div></div>
+    <button class="btn alt sm" style="margin-top:10px" onclick="saveEasyRun()">Log easy run</button>
+  </div>
+
+  <div class="card" style="padding:14px">
+    <div class="card-t">Something else</div>
+    <div style="font-size:12.5px;color:var(--muted2);line-height:1.55;margin-bottom:12px">
+    Swimming, cycling, yoga, a class — whatever you actually did.</div>
+    <div class="field" style="margin-bottom:10px">
+      <input type="text" id="ez_what" placeholder="What did you do?" maxlength="60">
+    </div>
+    <div class="inrow"><input type="number" inputmode="numeric" id="ez_min" placeholder="30" style="text-align:center">
+    <div class="unit">min</div></div>
+    <button class="btn alt sm" style="margin-top:10px" onclick="saveEasyOther()">Log it</button>
+  </div>
+  <div style="height:6px"></div>`;
+  document.getElementById('shFoot').innerHTML=`<button class="btn gh sm" onclick="closeSheet()">Cancel</button>`;
+  openSheet();
+}
+function startEasy(){
+  const plan=dayPlan(new Date());
+  const half=plan.ex.slice(0, Math.max(1,Math.ceil(plan.ex.length/2)));
+  closeSheet();
+  wkStart({ex:half, n:plan.n+' (short)', tag:'Reduced · easy day', brief:plan.brief, easy:true,
+           circuitFrom:plan.circuitFrom, half:plan.half, roxDrill:plan.roxDrill});
+}
+function logEasy(label, detail, results){
+  const key=todayKey();
+  const ex=S.logs.find(l=>l.date===key);
+  if(ex){ ex.results=Object.assign(ex.results||{},results||{}); ex.name=label; ex.easy=true; ex.detail=detail; }
+  else S.logs.push({date:key, week:weekNo(), name:label, detail, easy:true, results:results||{}});
+  save(); closeSheet(); toast('Logged — streak kept'); render();
+}
+function saveEasyRun(){
+  const km=parseFloat(document.getElementById('ez_km').value);
+  if(!km||km<=0){ toast('Enter a distance'); return; }
+  logEasy('Easy Run', km+' km', {easyrun:km});
+}
+function saveEasyOther(){
+  const what=(document.getElementById('ez_what').value||'').trim();
+  const min=parseInt(document.getElementById('ez_min').value,10);
+  if(!what){ toast('What did you do?'); return; }
+  logEasy(what, min?min+' min':'', {});
+}
+
+/* =====================================================================
+   SESSION HISTORY — review, correct, delete.
+   Without this a mistyped value is permanent: it becomes your best, then
+   your target, and targets ratchet so it never comes back down.
+   ===================================================================== */
+function openHistory(){
+  shMode='history';
+  const logs=S.logs.slice().sort((a,b)=>a.date<b.date?1:-1);
+  document.getElementById('shTitle').textContent='Session history';
+  document.getElementById('shSub').textContent=`${logs.length} session${logs.length===1?'':'s'} logged`;
+  document.getElementById('shBody').innerHTML = logs.length ? logs.map(l=>{
+    const ks=Object.keys(l.results||{});
+    const hits=ks.filter(k=>isHitAsOf(k,l.results[k],l.date)).length;
+    const d=new Date(l.date+'T12:00:00');
+    return `<div class="histrow" onclick="openSession('${l.date}')">
+      <div class="dot ${l.easy?'b':hits/Math.max(1,ks.length)>=0.7?'g':'r'}"></div>
+      <div style="flex:1;min-width:0">
+        <div class="row-t">${l.name}${l.easy?' <span class="pill m" style="padding:2px 6px;font-size:9px">EASY</span>':''}</div>
+        <div class="row-s">${longDate(d)}${l.detail?' · '+l.detail:ks.length?' · '+ks.length+' exercise'+(ks.length>1?'s':''):''}</div>
+      </div>
+      ${ks.length?`<span class="pill ${hits/ks.length>=0.7?'g':'r'}">${hits}/${ks.length}</span>`:''}
+      <svg class="caret" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l6 6-6 6"/></svg>
+    </div>`;}).join('')
+    : `<div class="empty"><b>Nothing logged yet</b><p>Sessions you complete will appear here, where you can review or correct them.</p></div>`;
+  document.getElementById('shFoot').innerHTML=`<button class="btn alt" onclick="closeSheet()">Done</button>`;
+  openSheet();
+}
+
+function openSession(date){
+  const l=S.logs.find(x=>x.date===date); if(!l){ toast('Session not found'); return; }
+  shMode='session'; shKeys=[date];
+  const ks=Object.keys(l.results||{});
+  const d=new Date(date+'T12:00:00');
+  document.getElementById('shTitle').textContent=l.name;
+  document.getElementById('shSub').textContent=longDate(d)+(l.easy?' · logged as an easy day':'');
+  document.getElementById('shBody').innerHTML=`
+  ${l.detail?`<div class="rxbox" style="color:var(--muted2);background:rgba(255,255,255,.04);border-color:var(--border)">${l.detail}</div>`:''}
+  ${ks.length?ks.map(k=>{
+    const e=EX[k]; if(!e) return '';
+    const v=l.results[k], hit=isHitAsOf(k,v,date);
+    const sets=(l.sets||{})[k];
+    return `<div class="field">
+      <div class="flabel"><span>${e.n}</span><span>${hit===null?'':hit?'Hit':'Missed'} · target was ${fmt(targetAsOf(k,date),e.kind)}</span></div>
+      ${sets&&sets.length>1?`<div class="setsline">Sets: ${sets.map(x=>fmt(x,e.kind)).join(' · ')}</div>`:''}
+      <div class="inrow">
+        <input ${e.kind==='time'?'type="text" inputmode="numeric"':'type="number" inputmode="decimal" step="any"'}
+          id="ed_${k}" value="${e.kind==='time'?fmt(v,'time'):v}">
+        <div class="unit">${e.kind==='time'?'mm:ss':e.kind==='kg'?'kg':e.kind==='dist'?'km':'reps'}</div>
+      </div>
+      <div class="fb" id="edfb_${k}" style="margin-top:7px">Correct it if this is wrong</div>
+    </div>`;}).join('')
+   :`<p style="font-size:13px;color:var(--muted2);line-height:1.6;padding:4px 0 12px">No exercise results on this session.</p>`}
+  ${(l.machines&&Object.keys(l.machines).length)?`<div class="machnote" style="margin-bottom:12px">Logged at: ${
+     Object.entries(l.machines).map(([mk,v])=>MACHINES[mk]?MACHINES[mk].n+' '+Object.entries(v).map(([a,bb])=>a+' '+bb).join('/'):'').filter(Boolean).join(' · ')}</div>`:''}
+  <div style="height:4px"></div>`;
+  document.getElementById('shFoot').innerHTML=`
+    ${ks.length?`<button class="btn" onclick="saveSessionEdit('${date}')">Save corrections</button>`:''}
+    <button class="btn gh sm" style="margin-top:9px;color:var(--red);border-color:rgba(239,68,68,.35)" onclick="confirmDeleteSession('${date}')">Delete this session</button>`;
+  openSheet();
+}
+
+function saveSessionEdit(date){
+  const l=S.logs.find(x=>x.date===date); if(!l) return;
+  const bad=[];
+  const next={};
+  Object.keys(l.results||{}).forEach(k=>{
+    const el=document.getElementById('ed_'+k); if(!el) return;
+    const v=parseVal(el.value, EX[k].kind);
+    if(v==null||v<=0){ bad.push(EX[k].n+': enter a value'); return; }
+    const chk=sane(k,v);
+    if(!chk.ok){ bad.push(EX[k].n+': '+chk.why); return; }
+    next[k]=v;
+  });
+  if(bad.length){ toast(bad[0]); return; }
+  l.results=next;
+  // a corrected value invalidates the stored per-set detail for that exercise
+  if(l.sets) Object.keys(l.sets).forEach(k=>{ if(next[k]==null) delete l.sets[k]; });
+  save(); closeSheet(); toast('Session corrected'); render();
+}
+
+let _delArmed=null;
+function confirmDeleteSession(date){
+  if(_delArmed===date){
+    S.logs=S.logs.filter(x=>x.date!==date);
+    _delArmed=null; save(); closeSheet(); toast('Session deleted'); render(); return;
+  }
+  _delArmed=date;
+  toast('Tap delete again to confirm');
+  setTimeout(()=>{ if(_delArmed===date)_delArmed=null; },3500);
+}
+
 function openWeight(){
   shMode='weight';
   document.getElementById('shTitle').textContent='Log body weight';
@@ -1505,7 +2081,8 @@ document.getElementById('scroll').addEventListener('scroll',function(){
   document.getElementById('hdr').classList.toggle('stuck', this.scrollTop>12);
 },{passive:true});
 
-load(); autoScale(); render();
+/* Boot happens at the very end of the app (see part6) so that every
+   function — including the workout-resume helpers — is defined first. */
 </script>
 <style>
 /* ===================== WORKOUT MODE (full-screen block UI) ===================== */
@@ -1523,7 +2100,8 @@ display:flex;align-items:center;gap:12px;
 padding:12px max(18px,var(--sal)) 10px max(18px,var(--sar));
 flex-shrink:0;
 }
-.wk-x{background:var(--card2);border:none;color:var(--white);width:33px;height:33px;border-radius:50%;font-size:18px;cursor:pointer;flex-shrink:0;line-height:1}
+.wk-x{background:var(--card2);border:none;color:var(--white);width:33px;height:33px;border-radius:50%;font-size:18px;cursor:pointer;flex-shrink:0;line-height:1;position:relative}
+.wk-x::after{content:'';position:absolute;top:50%;left:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
 .wk-ttl{flex:1;min-width:0}
 .wk-ttl b{display:block;font-weight:800;font-size:13px;line-height:1.2;letter-spacing:-.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .wk-ttl span{display:block;font-weight:600;font-size:10px;line-height:1.2;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin-top:3px}
@@ -1554,6 +2132,19 @@ text-align:center;margin:4px 0 10px;transition:color .3s;color:var(--white);
 #wk.rest .wk-time{color:var(--blue)}
 .wk-vs{font-weight:700;font-size:12.5px;line-height:1;color:var(--muted);text-align:center;margin-bottom:30px;letter-spacing:.3px}
 .wk-vs b{color:var(--gold)}
+
+/* Multi-set stations carry an extra pager + dots, which pushed the screen past
+   one viewport. Tighten only those; single-set stations keep the roomier look. */
+.wk-body.multiset .wk-kick{margin-bottom:7px}
+.wk-body.multiset .wk-name{font-size:25px;margin-bottom:4px}
+.wk-body.multiset .wk-sub{font-size:12.5px;margin-bottom:12px}
+.wk-body.multiset .rxbig{margin-bottom:10px;padding-top:8px;padding-bottom:8px}
+.wk-body.multiset .setpager{margin-bottom:10px}
+.wk-body.multiset .setpage{min-height:74px;padding:11px 14px}
+.wk-body.multiset .setdots{margin-bottom:10px}
+.wk-body.multiset .wk-time{font-size:58px;margin:2px 0 6px}
+.wk-body.multiset .wk-vs{margin-bottom:12px}
+.wk-body.multiset .sp-peek{margin-bottom:10px}
 
 /* round dots */
 .rounds{display:flex;gap:9px;justify-content:center;margin-bottom:24px}
@@ -1597,10 +2188,51 @@ border-top:.5px solid var(--border);background:var(--navy)}
    WORKOUT MODE — block-based, auto-advancing, skippable rest
    ===================================================================== */
 let W=null;          // active workout session
+const WKEY='hyroxWorkout_v1';
+/* An in-progress workout must survive a phone call, an app switch or a
+   reload — iOS suspends background pages aggressively. W is snapshotted to
+   localStorage after every state change and restored on load. */
+function wkPersist(){
+  try{
+    if(!W){ localStorage.removeItem(WKEY); return; }
+    localStorage.setItem(WKEY, JSON.stringify({
+      plan:W.plan, blocks:W.blocks, i:W.i, phase:W.phase,
+      t0:W.t0, startedAt:W.startedAt, restEnd:W.restEnd, restFrom:W.restFrom,
+      results:W.results, splits:W.splits, rox:W.rox,
+      setsDone:W.setsDone, sameStation:W.sameStation,
+      pendingKey:W.pendingKey, pendingSecs:W.pendingSecs, pendingSetIx:W.pendingSetIx,
+      pendingTimed:W.pendingTimed, pendingWhy:W.pendingWhy,
+      setData:W.setData, viewSet:W.viewSet, showCue:W.showCue,
+      savedAt:Date.now(), date:todayKey()
+    }));
+  }catch(e){}
+}
+function wkStored(){
+  try{
+    const raw=localStorage.getItem(WKEY); if(!raw) return null;
+    const d=JSON.parse(raw);
+    // only offer to resume today's workout, and only within 6 hours
+    if(d.date!==todayKey() || (Date.now()-d.savedAt)>6*3600e3){ localStorage.removeItem(WKEY); return null; }
+    return d;
+  }catch(e){ return null; }
+}
+function wkResume(){
+  const d=wkStored(); if(!d){ toast('Nothing to resume'); return; }
+  W=Object.assign({}, d);
+  W.splits=W.splits||{}; W.results=W.results||{}; W.setsDone=W.setsDone||{};
+  W.setData=W.setData||{}; if(W.viewSet===undefined) W.viewSet=null;
+  document.getElementById('wk').classList.add('on');
+  if(wkTick)clearInterval(wkTick);
+  wkTick=setInterval(wkFrame,100);
+  // a rest timer that expired while away should not strand you on the rest screen
+  if(W.phase==='rest' && W.restEnd<=Date.now()) W.restEnd=Date.now()+5000;
+  wkRender();
+}
+function wkDiscardStored(){ try{ localStorage.removeItem(WKEY); }catch(e){} render(); }
 let wkTick=null;     // interval handle
 let wakeLock=null;
 
-const REST={sledPush:120,sledPull:120,squat:150,rdl:150,ohp:120,row_bb:120,
+const REST={sledPush:120,sledPull:120,squat:150,kbswing:90,ohp:120,row_bb:120,
             farmhold:90,plank:60,_round:180,_default:90};
 /* A session can mark where its circuit starts (plan.circuitFrom, a 0-based
    index into plan.ex). From that station on, rest is 15 s — just enough to
@@ -1625,8 +2257,8 @@ function buildBlocks(plan){
   return blocks;
 }
 
-async function wkStart(){
-  const plan=dayPlan(new Date());
+async function wkStart(override){
+  const plan = override || dayPlan(new Date());
   if(!plan.ex.length){ toast('Rest day — nothing scheduled'); return; }
   W={plan, blocks:buildBlocks(plan), i:0, phase:'work', t0:Date.now(), startedAt:Date.now(),
      results:{}, splits:{}, restEnd:0};
@@ -1634,10 +2266,17 @@ async function wkStart(){
   try{ if('wakeLock' in navigator) wakeLock=await navigator.wakeLock.request('screen'); }catch(e){}
   if(wkTick)clearInterval(wkTick);
   wkTick=setInterval(wkFrame,100);
-  wkRender();
+  wkPersist(); wkRender();
 }
 function wkQuit(){
-  if(W && W.i>0 && W.phase!=='summary'){
+  /* Guard on WORK DONE, not on station index. Finishing two of three sets on
+     station 1 leaves W.i at 0, and that used to quit on a single tap and throw
+     the sets away. */
+  const didWork = W && (W.i>0
+    || Object.keys(W.results||{}).length>0
+    || Object.keys(W.setData||{}).length>0
+    || Object.values(W.setsDone||{}).some(n=>n>0));
+  if(didWork && W.phase!=='summary'){
     if(!confirmQuit()) return;
   }
   wkClose();
@@ -1650,10 +2289,65 @@ function confirmQuit(){
   return false;
 }
 function wkClose(){
+  try{ localStorage.removeItem(WKEY); }catch(e){}
   document.getElementById('wk').classList.remove('on','rest','done');
   if(wkTick){clearInterval(wkTick);wkTick=null;}
   try{ if(wakeLock){wakeLock.release();wakeLock=null;} }catch(e){}
   W=null; _quitArmed=false; render();
+}
+
+/* ---- swipeable set pager --------------------------------------------------
+   Dots are tappable AND the card swipes left/right, so you can look back at
+   set 1 while standing in set 2 without losing your place. */
+function setPagerHTML(k){
+  const n=setsOf(k); if(n<2) return '';
+  const e=EX[k];
+  const done=(W.setsDone&&W.setsDone[k])||0;   // sets finished
+  const live=Math.min(done, n-1);              // the set you are in now
+  const view=setView(k);
+  const unit = e.kind==='kg'?'kg':e.kind==='dist'?'km':e.kind==='time'?'':'reps';
+
+  /* Every set is rendered as its own panel; the track slides to show one. */
+  const panels = Array.from({length:n},(_,i)=>{
+    const rec=setGet(k,i);
+    const isDone = i<done;
+    const isNow  = i===live && !isDone;
+    let inner;
+    if(isDone){
+      inner = `<div class="sp-h">Set ${i+1} · done</div>
+        <div class="sp-big">${rec&&rec.t!=null?fmt(rec.t,'time'):'—'}</div>`
+        + (e.kind!=='time'
+            ? `<div class="sp-w">
+                 <button onclick="bumpSet('${k}',${i},-2)">−</button>
+                 <input id="spEdit_${i}" type="number" inputmode="decimal" step="any"
+                        value="${rec&&rec.v!=null?rec.v:''}" onchange="editSet('${k}',${i})">
+                 <span class="u">${unit}</span>
+                 <button onclick="bumpSet('${k}',${i},2)">+</button>
+               </div>`
+            : `<div class="sp-sub">Logged</div>`);
+    } else if(isNow){
+      inner = `<div class="sp-h">Set ${i+1} · now</div>
+        <div class="sp-sub">${rxOf(k)||''}</div>
+        <div class="sp-sub">Target <b style="color:var(--yellow)">${fmt(targetOf(k),e.kind)}</b></div>`;
+    } else {
+      inner = `<div class="sp-h">Set ${i+1} · up next</div>
+        <div class="sp-sub">${rxOf(k)||''}</div>`;
+    }
+    return `<div class="setpage ${isDone?'isdone':''} ${isNow?'isnow':''} ${i===view?'':'off'}">${inner}</div>`;
+  }).join('');
+
+  const tabs = Array.from({length:n},(_,i)=>{
+    const isDone=i<done, isLive=(i===live && !isDone);
+    return `<button class="stab${isDone?' done':''}${isLive?' live':''}${i===view?' sel':''}"
+       onclick="goSet(${i})">${isDone?'<span class="tk">✓</span>':''}Set ${i+1}</button>`;
+  }).join('');
+
+  return `<div class="settabs">${tabs}</div>
+  <div class="setpager" id="spWrap"
+      ontouchstart="spStart(event)" ontouchmove="spMove(event)" ontouchend="spEnd(event)"
+      onmousedown="spStart(event)">
+    <div class="sptrack" id="spTrack">${panels}</div>
+  </div>`;
 }
 
 function wkFrame(){
@@ -1676,17 +2370,185 @@ function wkFrame(){
   }
 }
 
+/* ---- per-set record -------------------------------------------------------
+   W.setData[key][i] = {t:<seconds>, v:<weight/reps>}
+   One entry per set, so a finished set can be shown and corrected later. */
+function setLog(k, ix, patch){
+  W.setData = W.setData || {};
+  const a = (W.setData[k] = W.setData[k] || []);
+  a[ix] = Object.assign({}, a[ix] || {}, patch);
+}
+function setGet(k, ix){ return (W.setData && W.setData[k] && W.setData[k][ix]) || null; }
+
+/* roll the session result up from the individual sets (best set wins) */
+function rollUp(k){
+  const e=EX[k], a=(W.setData&&W.setData[k])||[];
+  let best=null;
+  a.forEach(s=>{ if(!s || s.v==null) return;
+    best = best==null ? s.v : (e.dir==='lower' ? Math.min(best,s.v) : Math.max(best,s.v)); });
+  if(best!=null) W.results[k]=best;
+}
+
+function wkRestSameStation(b){
+  W.phase='rest'; W.restFrom=Date.now();
+  W.restEnd=Date.now()+restFor(b.k, W.i, W.plan)*1000;
+  W.sameStation=true;
+  wkRender();
+}
+
+/* which set the pager is showing; null = follow the live set */
+function setView(k){
+  const done=(W.setsDone&&W.setsDone[k])||0;
+  const n=setsOf(k);
+  if(W.viewSet==null) return Math.min(done, n-1);
+  return Math.max(0, Math.min(W.viewSet, n-1));
+}
+function viewSet(d){
+  const b=W.blocks[W.i]; if(!b) return;
+  const n=setsOf(b.k);
+  const cur=setView(b.k);
+  const nx=Math.max(0, Math.min(cur+d, n-1));
+  goSet(nx);
+}
+function toggleCue(){ if(!W)return; W.showCue=!W.showCue; wkPersist(); wkRender(); }
+function goSet(i){
+  const b=W&&W.blocks[W.i]; if(!b) return;
+  W.viewSet=Math.max(0, Math.min(i, setsOf(b.k)-1));
+  spPlace(W.viewSet, true);   // slide first, so the motion is visible
+  wkRender();
+}
+
+/* ---- finger drag on the set carousel ---------------------------------------
+   The track follows the finger in real time and snaps to the nearest set on
+   release. A short flick counts even if it did not travel far. */
+let _sw=null;
+/* Panels are narrower than the window (the neighbours peek), so the track is
+   offset in pixels off the real panel pitch, not in percent. */
+/* offsetWidth/offsetLeft ignore the CSS scale() on inactive panels, so the
+   pitch stays constant; getBoundingClientRect() would shrink with the scale
+   and drift the centring set by set. */
+function spStep(){
+  const tr=document.getElementById('spTrack');
+  if(!tr||tr.children.length<2) return tr&&tr.children.length?tr.children[0].offsetWidth:0;
+  return tr.children[1].offsetLeft - tr.children[0].offsetLeft;   // width + gap
+}
+function spOffset(i){
+  const tr=document.getElementById('spTrack');
+  if(!tr||!tr.children.length) return 0;
+  /* panels are full-window width now, so panel i sits at exactly -i*pitch */
+  return -i*spStep();
+}
+function spPlace(i, anim){
+  const tr=document.getElementById('spTrack');
+  if(!tr||!tr.children.length) return;
+  if(!anim) tr.classList.add('drag');
+  tr.style.transform=`translateX(${spOffset(i)}px)`;
+  if(!anim) requestAnimationFrame(()=>tr.classList.remove('drag'));
+}
+/* Mouse drag (desktop / testing) needs document-level move+up; touch is bound
+   inline on the element. Registered once. */
+if(typeof window!=='undefined' && !window._spBound){
+  window._spBound=true;
+  document.addEventListener('mousemove',e=>{ if(_sw) spMove(e); });
+  document.addEventListener('mouseup',  e=>{ if(_sw) spEnd(e);  });
+}
+function spStart(ev){
+  const b=W&&W.blocks[W.i]; if(!b||setsOf(b.k)<2) return;
+  const t=ev.touches?ev.touches[0]:ev;
+  const tr=document.getElementById('spTrack'), wr=document.getElementById('spWrap');
+  if(!tr||!wr) return;
+  /* dragging from inside the weight box would fight the number input */
+  if(ev.target.closest && ev.target.closest('.sp-w')) return;
+  _sw={x:t.clientX, y:t.clientY, t0:Date.now(), w:wr.clientWidth,
+       i:setView(b.k), n:setsOf(b.k), moved:false, lock:null};
+  tr.classList.add('drag');
+}
+function spMove(ev){
+  if(!_sw) return;
+  const t=ev.touches?ev.touches[0]:ev;
+  const dx=t.clientX-_sw.x, dy=t.clientY-_sw.y;
+  /* decide once whether this gesture is a horizontal swipe or a vertical scroll */
+  if(_sw.lock===null){
+    if(Math.abs(dx)<6 && Math.abs(dy)<6) return;
+    _sw.lock = Math.abs(dx)>Math.abs(dy) ? 'x' : 'y';
+  }
+  if(_sw.lock==='y'){ return; }           // let the page scroll
+  ev.preventDefault();
+  _sw.moved=true;
+  const tr=document.getElementById('spTrack'), wr=document.getElementById('spWrap');
+  if(!tr||!wr||!tr.children.length) return;
+  /* resist pulling past the first or last set */
+  let off=dx;
+  if((_sw.i===0 && dx>0) || (_sw.i===_sw.n-1 && dx<0)) off=dx*0.32;
+  tr.style.transform=`translateX(${spOffset(_sw.i) + off}px)`;
+}
+function spEnd(ev){
+  if(!_sw) return;
+  const sw=_sw; _sw=null;
+  const tr=document.getElementById('spTrack');
+  if(tr) tr.classList.remove('drag');
+  if(!sw.moved || sw.lock!=='x'){ spPlace(sw.i, true); return; }
+  const t=(ev.changedTouches?ev.changedTouches[0]:ev);
+  const dx=t.clientX-sw.x;
+  const dt=Math.max(1, Date.now()-sw.t0);
+  const fast=Math.abs(dx)/dt > 0.45;              // a flick
+  const far =Math.abs(dx) > sw.w*0.22;            // or dragged far enough
+  let nx=sw.i;
+  if((fast||far) && Math.abs(dx)>18) nx = dx<0 ? sw.i+1 : sw.i-1;
+  nx=Math.max(0, Math.min(nx, sw.n-1));
+  W.viewSet=nx;
+  spPlace(nx, true);
+  wkRender();
+}
+
+
+/* A timed station writes straight from the stopwatch, with no entry screen to
+   validate. An accidental tap therefore used to store e.g. 2 s, and because
+   lower-is-better targets ratchet to your best, that bogus time became a
+   target you could never beat again. Route timed results through the same
+   sanity check as manual entry, and park an implausible one for confirmation
+   instead of silently banking it. */
+function recordTimed(k, secs){
+  const e=EX[k];
+  const chk=sane(k,secs);
+  if(!chk.ok && chk.soft){
+    W.pendingKey=k; W.pendingSecs=secs; W.pendingTimed=true; W.pendingWhy=chk.why;
+    return false;                      // caller shows the confirm screen
+  }
+  if(!chk.ok) return false;            // hard reject: 0 or negative, drop it
+  (W.splits[k]=W.splits[k]||[]).push(secs);
+  const cur=W.results[k];
+  W.results[k] = cur==null?secs:(e.dir==='lower'?Math.min(cur,secs):Math.max(cur,secs));
+  return true;
+}
+
 /* finish current station, record the time */
 function wkDone(){
   if(!W||W.phase!=='work')return;
   const b=W.blocks[W.i];
   const secs=Math.round((Date.now()-W.t0)/1000);
   const e=EX[b.k];
+  /* multi-set stations: record the set, rest, come back to the same station */
+  const nSets=setsOf(b.k);
+  if(nSets>1){
+    W.setsDone=W.setsDone||{};
+    const done=(W.setsDone[b.k]||0)+1;
+    W.setsDone[b.k]=done;
+    /* Every set keeps its own time, so you can swipe back and see it.
+       Previously secs was computed and discarded for non-time stations. */
+    setLog(b.k, done-1, {t:secs});
+    if(e.kind==='time' && !recordTimed(b.k, secs)){
+      if(W.pendingTimed){ wkRenderEntry(); return; }   // implausible: confirm it
+    }
+    /* Weight/rep stations ask per set, so the load is captured while it is fresh. */
+    if(e.kind!=='time'){ W.pendingKey=b.k; W.pendingSetIx=done-1; W.pendingSecs=secs;
+      wkRenderEntry(); return; }
+    if(done<nSets){ wkRestSameStation(b); return; }
+    wkAfterStation(); return;
+  }
   if(e.kind==='time'){
     // record every occurrence; store the best as the session result
-    (W.splits[b.k]=W.splits[b.k]||[]).push(secs);
-    const cur=W.results[b.k];
-    W.results[b.k] = cur==null?secs:(e.dir==='lower'?Math.min(cur,secs):Math.max(cur,secs));
+    if(!recordTimed(b.k, secs) && W.pendingTimed){ wkRenderEntry(); return; }
   } else {
     W.pendingKey=b.k; W.pendingSecs=secs; wkRenderEntry(); return;
   }
@@ -1706,40 +2568,137 @@ function wkNext(){
     W.rox=(W.rox||0)+Math.round((Date.now()-W.restFrom)/1000);
     W.restFrom=0;
   }
+  if(W.sameStation){ W.sameStation=false; W.phase='work'; W.viewSet=null; W.t0=Date.now(); wkRender(); return; }
   if(W.i>=W.blocks.length-1){ W.phase='summary'; wkRender(); return; }
-  W.i++; W.phase='work'; W.t0=Date.now(); wkRender();
+  W.i++; W.phase='work'; W.viewSet=null; W.t0=Date.now(); wkRender();
 }
 function wkSkipStation(){
   if(!W)return;
   if(W.i>=W.blocks.length-1){ W.phase='summary'; wkRender(); return; }
-  W.i++; W.phase='work'; W.t0=Date.now(); wkRender();
+  W.i++; W.phase='work'; W.viewSet=null; W.t0=Date.now(); wkRender();
 }
 /* reps/kg entry mid-workout */
 function wkRenderEntry(){
   const k=W.pendingKey, e=EX[k];
+  W._lastRejected=null;
+  /* A stopwatch time that failed the sanity check: confirm or discard it,
+     rather than asking for a number that was never typed. */
+  if(W.pendingTimed){ wkRenderTimedConfirm(); return; }
   document.getElementById('wk').className='on';
   document.getElementById('wkTitle').textContent=W.plan.n;
-  document.getElementById('wkStep').textContent='Enter result';
+  const six = W.pendingSetIx;
+  const nS  = setsOf(k);
+  const multi = six!=null && nS>1;
+  /* prefill: the weight from the previous set, else your target */
+  let pre = '';
+  if(multi && six>0){ const pv=setGet(k,six-1); if(pv && pv.v!=null) pre=pv.v; }
+  if(pre==='' ){ const t=targetOf(k); if(t!=null) pre=t; }
+  document.getElementById('wkStep').textContent = multi ? `Set ${six+1} of ${nS}` : 'Enter result';
   document.getElementById('wkRail').innerHTML=railHTML();
+  document.getElementById('wkBody').classList.remove('multiset');
   document.getElementById('wkBody').innerHTML=`
-  <div class="wk-kick">Station complete</div>
+  <div class="wk-kick">${multi?`Set ${six+1} done`:'Station complete'}</div>
   <div class="wk-name">${e.n}</div>
-  <div class="wk-sub">Took ${fmt(W.pendingSecs,'time')}. Enter what you actually did.</div>
+  <div class="wk-sub">Took ${fmt(W.pendingSecs,'time')}. What did you actually use?</div>
   <div style="width:100%;max-width:300px">
-    <div class="inrow"><input type="number" inputmode="decimal" step="any" id="wkIn" placeholder="${e.kind==='kg'?'kg':e.kind==='dist'?'km':'reps'}" style="text-align:center;font-size:24px;font-weight:800;padding:16px">
+    <div class="inrow"><input type="number" inputmode="decimal" step="any" id="wkIn" value="${pre}" placeholder="${e.kind==='kg'?'kg':e.kind==='dist'?'km':'reps'}" style="text-align:center;font-size:24px;font-weight:800;padding:16px">
     <div class="unit">${e.kind==='kg'?'kg':e.kind==='dist'?'km':'reps'}</div></div>
     <div style="text-align:center;font-weight:600;font-size:11.5px;line-height:1;color:var(--muted);margin-top:11px">Target ${fmt(targetOf(k),e.kind)}</div>
+    <div id="wkWarn" style="text-align:center;font-weight:600;font-size:11.5px;line-height:1.5;color:var(--red);margin-top:10px;min-height:0"></div>
   </div>`;
   document.getElementById('wkFoot').innerHTML=`<button class="btn" onclick="wkSaveEntry()">Confirm</button>`;
   setTimeout(()=>{const i=document.getElementById('wkIn');if(i)i.focus();},200);
 }
+function wkRenderTimedConfirm(){
+  const k=W.pendingKey, e=EX[k], secs=W.pendingSecs;
+  document.getElementById('wk').className='on';
+  document.getElementById('wkTitle').textContent=W.plan.n;
+  document.getElementById('wkStep').textContent='Check this time';
+  document.getElementById('wkRail').innerHTML=railHTML();
+  const bd=document.getElementById('wkBody');
+  bd.classList.remove('multiset');
+  bd.innerHTML=`
+  <div class="wk-kick">Does this look right?</div>
+  <div class="wk-name">${e.n}</div>
+  <div class="wk-time">${fmt(secs,'time')}</div>
+  <div class="wk-vs">Target <b>${fmt(targetOf(k),e.kind)}</b></div>
+  <div style="max-width:300px;margin:4px auto 0;text-align:center;font-weight:600;
+       font-size:12px;line-height:1.55;color:var(--red)">${W.pendingWhy||''}</div>
+  <div style="max-width:300px;margin:10px auto 0;text-align:center;font-size:11.5px;
+       line-height:1.55;color:var(--muted)">Keeping a wrong time here would move your
+       target permanently, so nothing is saved until you choose.</div>`;
+  document.getElementById('wkFoot').innerHTML=
+   `<button class="btn" onclick="wkDiscardTimed()">Discard this station</button>
+    <button class="btn gh sm" onclick="wkKeepTimed()">The time is correct</button>`;
+}
+function wkKeepTimed(){
+  const k=W.pendingKey, e=EX[k], secs=W.pendingSecs;
+  (W.splits[k]=W.splits[k]||[]).push(secs);
+  const cur=W.results[k];
+  W.results[k] = cur==null?secs:(e.dir==='lower'?Math.min(cur,secs):Math.max(cur,secs));
+  wkClearTimed();
+}
+function wkDiscardTimed(){ wkClearTimed(); }   // station simply records nothing
+function wkClearTimed(){
+  const k=W.pendingKey;
+  W.pendingKey=null; W.pendingTimed=false; W.pendingWhy=null; W.pendingSecs=null;
+  const b=W.blocks[W.i];
+  const n=setsOf(b.k), done=(W.setsDone&&W.setsDone[b.k])||0;
+  if(n>1 && done<n){ W.viewSet=null; wkRestSameStation(b); return; }
+  wkAfterStation();
+}
+
 function wkSaveEntry(){
   const k=W.pendingKey, e=EX[k];
   const v=parseVal(document.getElementById('wkIn').value,e.kind);
   if(v==null||v<=0){ toast('Enter a number'); return; }
+  const chk=sane(k,v);
+  if(!chk.ok){
+    /* A soft warning is a sanity check, not a verdict — show it on screen
+       (a toast is easy to miss mid-set) and let you confirm the number. */
+    const warn=document.getElementById('wkWarn');
+    if(chk.soft && W._lastRejected===v){ /* second press = you meant it */ }
+    else {
+      if(warn) warn.innerHTML = `${chk.why}${chk.soft?'<br><b>Press Confirm again to keep it.</b>':''}`;
+      else toast(chk.why);
+      W._lastRejected = chk.soft ? v : null;
+      return;
+    }
+  }
+  W._lastRejected=null;
+  const six=W.pendingSetIx, nS=setsOf(k);
+  if(six!=null && nS>1){
+    setLog(k, six, {v:v});
+    rollUp(k);
+    W.pendingKey=null; W.pendingSetIx=null;
+    const done=(W.setsDone&&W.setsDone[k])||0;
+    if(done<nS){ W.viewSet=null; wkRestSameStation(W.blocks[W.i]); return; }
+    wkAfterStation(); return;
+  }
   const cur=W.results[k];
   W.results[k]= cur==null?v:(e.dir==='lower'?Math.min(cur,v):Math.max(cur,v));
   W.pendingKey=null; wkAfterStation();
+}
+
+/* correcting a set you already finished, from the pager */
+function editSet(k, ix){
+  const e=EX[k], el=document.getElementById('spEdit_'+ix);
+  if(!el) return;
+  const v=parseVal(el.value, e.kind);
+  if(v==null||v<=0){ toast('Enter a number'); return; }
+  const chk=sane(k,v);
+  if(!chk.ok){ toast(chk.why); return; }
+  setLog(k, ix, {v:v});
+  rollUp(k);
+  wkPersist(); wkRender();
+  toast(`Set ${ix+1} updated`);
+}
+function bumpSet(k, ix, d){
+  const el=document.getElementById('spEdit_'+ix); if(!el) return;
+  const e=EX[k];
+  const cur=parseVal(el.value,e.kind)||0;
+  el.value = Math.max(0, Math.round((cur+d)*100)/100);
+  editSet(k, ix);
 }
 
 function railHTML(){
@@ -1748,6 +2707,7 @@ function railHTML(){
 
 function wkRender(){
   if(!W)return;
+  wkPersist();
   const wkEl=document.getElementById('wk');
   const body=document.getElementById('wkBody'), foot=document.getElementById('wkFoot');
   document.getElementById('wkRail').innerHTML=railHTML();
@@ -1782,15 +2742,29 @@ function wkRender(){
   /* ---------- REST ---------- */
   if(W.phase==='rest'){
     wkEl.className='on rest';
-    const nb=W.blocks[W.i+1];
+    body.classList.remove('multiset');
+    const sameSt = W.sameStation===true;
+    const nb = sameSt ? W.blocks[W.i] : W.blocks[W.i+1];
     document.getElementById('wkTitle').textContent=W.plan.n;
-    document.getElementById('wkStep').textContent='Rest';
+    document.getElementById('wkStep').textContent = sameSt ? 'Rest between sets' : 'Rest';
     body.innerHTML=`
     <div class="wk-kick">Rest</div>
     <div class="wk-time" id="wkTime">${fmt(Math.max(0,Math.ceil((W.restEnd-Date.now())/1000)),'time')}</div>
-    <div class="wk-vs">Next up</div>
+    <div class="wk-vs">${sameSt?'Same station':'Next up'}</div>
     <div class="wk-name" style="font-size:22px">${EX[nb.k].n}</div>
-    <div class="wk-sub">Station ${W.i+2} of ${W.blocks.length} · Target ${fmt(targetOf(nb.k),EX[nb.k].kind)}${EX[nb.k].load?' @ '+EX[nb.k].load+' '+EX[nb.k].loadUnit:''}</div>`;
+    <div class="wk-sub">${sameSt
+      ? `Set ${((W.setsDone&&W.setsDone[nb.k])||0)+1} of ${setsOf(nb.k)} · Target ${fmt(targetOf(nb.k),EX[nb.k].kind)}`
+      : `Station ${W.i+2} of ${W.blocks.length} · Target ${fmt(targetOf(nb.k),EX[nb.k].kind)}${EX[nb.k].load?' @ '+EX[nb.k].load+' '+EX[nb.k].loadUnit:''}`}</div>`;
+    /* Between sets, show every set you have already done at this station. */
+    if(sameSt){
+      const k=nb.k, e=EX[k], a=(W.setData&&W.setData[k])||[];
+      const unit = e.kind==='kg'?' kg':e.kind==='dist'?' km':e.kind==='time'?'':' reps';
+      const rows = a.map((r,i)=> r ? `<div class="setsline"><b>Set ${i+1}</b>${
+          r.t!=null?fmt(r.t,'time'):'—'}${r.v!=null?' · '+r.v+unit:''}</div>` : '').join('');
+      if(rows) body.innerHTML += `<div class="prevsplit" style="margin-top:16px;text-align:left">
+        <b style="font-size:11px;letter-spacing:.5px;color:var(--muted)">THIS STATION SO FAR</b>
+        ${rows}</div>`;
+    }
     if(W.plan.half){
       const rx=W.rox||0;
       // 16 transitions on race day. Project this session's pace across all 16.
@@ -1810,13 +2784,14 @@ function wkRender(){
         </div>`;
       }
     }
-    foot.innerHTML=`<button class="btn" onclick="wkNext()">Skip rest · start now</button>
+    foot.innerHTML=`<button class="btn" onclick="wkNext()">${sameSt?'Start next set':'Skip rest · start now'}</button>
     <button class="btn gh sm" onclick="W.restEnd+=30000">+30 sec</button>`;
     return;
   }
 
   /* ---------- WORK ---------- */
   wkEl.className='on';
+  body.classList.toggle('multiset', setsOf(b.k)>1);
   document.getElementById('wkTitle').textContent=W.plan.n;
   document.getElementById('wkStep').textContent=`Station ${W.i+1} of ${W.blocks.length}`;
 
@@ -1838,22 +2813,106 @@ function wkRender(){
   <div class="wk-kick">${GRP[e.grp].n}</div>
   <div class="wk-name">${e.n}</div>
   <div class="wk-sub">${e.load?`${e.load} ${e.loadUnit} · `:''}${e.note||W.plan.brief}</div>
-  <div class="wk-time" id="wkTime">0:00</div>
+  ${rxOf(b.k)?`<div class="rxbig">${rxOf(b.k)}</div>`:''}
+  ${setPagerHTML(b.k)}
+  ${(()=>{const n=setsOf(b.k);
+     if(n<2) return '';
+     const done=(W.setsDone&&W.setsDone[b.k])||0, live=Math.min(done,n-1);
+     return setView(b.k)!==live ? '<div class="sp-peek">Timer still running</div>' : '';
+   })()}
+  ${(()=>{ if(!e.cue) return '';
+     /* The cue is reference, not something to read mid-set. It collapses to a
+        single button and opens only when asked. */
+     const n=setsOf(b.k);
+     if(n>1){ const done=(W.setsDone&&W.setsDone[b.k])||0, live=Math.min(done,n-1);
+       if(setView(b.k)!==live) return ''; }
+     return W.showCue
+       ? `<div class="cuebox"><button class="cueclose" onclick="toggleCue()" aria-label="Hide form notes">×</button>
+            <b>Form</b> ${e.cue}</div>`
+       : `<button class="cuebtn" onclick="toggleCue()">Form notes</button>`;})()}
+  <div class="wk-time${(()=>{const n=setsOf(b.k);if(n<2)return '';
+     const done=(W.setsDone&&W.setsDone[b.k])||0,live=Math.min(done,n-1);
+     return setView(b.k)!==live?' dim':'';})()}" id="wkTime">0:00</div>
   <div class="wk-vs">Target <b>${fmt(t,e.kind)}</b></div>
   ${prev}`;
-  foot.innerHTML=`<button class="btn" onclick="wkDone()">Finish station</button>
-  <button class="btn gh sm" onclick="wkSkipStation()">Skip</button>`;
+  const nSets=setsOf(b.k);
+  /* position the carousel once the panels exist and have real widths */
+  if(nSets>1) requestAnimationFrame(()=>spPlace(setView(b.k), false));
+  const sdone=(W.setsDone&&W.setsDone[b.k])||0;
+  const lastSet = nSets<2 || sdone>=nSets-1;
+  const viewing = nSets>1 ? setView(b.k) : 0;
+  const live    = Math.min(sdone, nSets-1);
+  /* If you swiped away to look at another set, the primary action returns you
+     to the live set rather than finishing the wrong one. */
+  foot.innerHTML = (nSets>1 && viewing!==live)
+    ? `<button class="btn" onclick="W.viewSet=null;wkRender()">Back to set ${live+1}</button>
+       <button class="btn gh sm" onclick="wkSkipStation()">Skip</button>`
+    : `<button class="btn" onclick="wkDone()">${lastSet?'Finish station':'Finish set '+(sdone+1)+' of '+nSets}</button>
+       <button class="btn gh sm" onclick="wkSkipStation()">Skip</button>`;
 }
 
 function wkSave(){
   const key=todayKey();
+  const easy = W.plan.easy===true;
+  /* carry the per-set detail into the log so Progress can show it */
+  const sets={};
+  Object.keys(W.setData||{}).forEach(k=>{
+    const vals=(W.setData[k]||[]).map(r=>r&&r.v!=null?r.v:null).filter(v=>v!=null);
+    if(vals.length) sets[k]=vals;
+  });
+  const times={};
+  Object.keys(W.setData||{}).forEach(k=>{
+    const ts=(W.setData[k]||[]).map(r=>r&&r.t!=null?r.t:null).filter(v=>v!=null);
+    if(ts.length) times[k]=ts;
+  });
   const ex=S.logs.find(l=>l.date===key);
-  if(ex){ ex.results=Object.assign(ex.results||{},W.results); ex.name=W.plan.n; }
-  else S.logs.push({date:key, week:weekNo(), name:W.plan.n, results:Object.assign({},W.results)});
+  if(ex){ ex.results=Object.assign(ex.results||{},W.results); ex.name=W.plan.n;
+    ex.sets=Object.assign(ex.sets||{},sets); ex.setTimes=Object.assign(ex.setTimes||{},times);
+    if(easy)ex.easy=true; }
+  else S.logs.push({date:key, week:weekNo(), name:W.plan.n, results:Object.assign({},W.results),
+    sets:Object.keys(sets).length?sets:undefined,
+    setTimes:Object.keys(times).length?times:undefined, easy:easy||undefined});
   save();
   const ks=Object.keys(W.results), hits=ks.filter(k=>isHit(k,W.results[k])).length;
   wkClose();
   toast(`Saved · ${hits}/${ks.length} target${ks.length===1?'':'s'} hit`);
+}
+
+/* ---------------- BOOT ----------------
+   Runs last so wkStored() and friends exist when the first render happens;
+   otherwise the "unfinished session" banner is silently skipped. */
+load();
+autoScale();
+render();
+
+/* ---- offline support -------------------------------------------------------
+   sw.js was shipped to dist/ but never registered, so the installed PWA
+   failed to open without a connection — the one situation it exists for.
+   Registered only over http(s): a file:// or artifact-host page has no
+   service worker scope and would throw. */
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      /* A new deployment should not wait for every tab to close. */
+      reg.addEventListener('updatefound', () => {
+        const sw = reg.installing;
+        if (!sw) return;
+        sw.addEventListener('statechange', () => {
+          if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+            sw.postMessage({ type: 'SKIP_WAITING' });
+          }
+        });
+      });
+    }).catch(() => { /* offline support is a bonus; never break boot over it */ });
+  });
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (reloading) return;
+    reloading = true;
+    /* Never yank the page out from under a running workout. */
+    if (typeof W !== 'undefined' && W) return;
+    location.reload();
+  });
 }
 </script>
 </body>
